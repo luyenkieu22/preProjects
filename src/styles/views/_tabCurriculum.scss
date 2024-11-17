@@ -1,0 +1,177 @@
+.container-vitae {
+  background-color: #cccccc;
+  padding: 20px 20px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.body-vitae {
+  background-color: #ffffff;
+  padding: 14px 50px;
+}
+
+.header-text {
+  font-weight: 600;
+}
+
+.body-profile {
+  margin-top: 40px;
+}
+
+.image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.items-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.text-title {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.text-md {
+  font-size: 1.1rem;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.vitae-body {
+  margin: 20px 0;
+  font-size: 1.1rem;
+}
+
+.box-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-profile-self {
+  padding-left: 24px;
+  line-height: 1.8rem;
+  font-size: 0.9rem;
+}
+
+.resume-sub-heading {
+  font-size: 1.2rem !important;
+}
+
+.resume-heading {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.table-head,
+.table-body {
+  border: 1px solid;
+}
+
+.table-body {
+  font-weight: normal !important;
+}
+
+.detail-content {
+  display: inline-block;
+  padding-left: 12px;
+  flex-grow: 1;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 1rem;
+}
+
+.footer-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 40%;
+}
+
+.vitae-date {
+  display: flex;
+  width: 100%;
+  font-style: italic;
+}
+
+.type-date {
+  display: flex;
+  flex-grow: 1;
+}
+
+.type-content {
+  flex-grow: 1;
+}
+
+.footer-label {
+  margin-top: 16px;
+}
+
+.footer-notify {
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+.footer-signature {
+  margin-top: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+// ----------------------------------------------
+
+.underline-title {
+  position: relative;
+  max-width: max-content;
+  text-align: center;
+}
+
+.underline-title::after {
+  content: "";
+  position: absolute;
+  width: 307px;
+  bottom: 0;
+  left: calc(307 / 2);
+  right: 0;
+  border-bottom: 2px solid;
+}
+
+.underline__dotted {
+  position: relative;
+}
+
+.underline__dotted::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed;
+}

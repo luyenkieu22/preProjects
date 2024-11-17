@@ -1,0 +1,162 @@
+.upload-drop-box {
+  height: 120px;
+  width: 100%;
+  border: 2px solid gray;
+  border-radius: 4px;
+}
+
+.MuiTypography-body1 {
+  font-size: 16px !important;
+}
+
+.container-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.w-90 {
+  width: 90%;
+}
+
+.mt-32 {
+  margin-top: 32px;
+}
+
+.mx-32 {
+  margin: 32px 0;
+}
+
+.mx-50 {
+  margin: 50px 0;
+}
+
+.pb-12 {
+  padding-bottom: 12px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.px-24 {
+  padding: 0 24px;
+}
+
+.px-32 {
+  padding: 0 32px;
+}
+
+.wrapper-dialog {
+  background-color: #ededed !important;
+
+  @media screen and (max-width: 768px) {
+    padding: 12px !important;
+  }
+}
+
+.dialog-body {
+  background-color: #fff;
+  padding: 40px 40px 80px 40px;
+  width: 100%;
+  p {
+    font-family: "Times New Roman", Times, serif !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 10px 10px 20px 40px;
+  }
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.text-justify {
+  p {
+    text-align: justify;
+  }
+}
+
+.text-xl {
+  font-size: 20px !important;
+}
+
+.line-height-25 {
+  line-height: 2.5 !important;
+}
+
+.italic {
+  font-style: italic !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.sign-text {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.text-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-underline {
+  text-decoration: underline;
+  text-underline-position: under;
+  text-transform: none;
+  padding-bottom: 4px;
+  margin-bottom: 32px;
+}
+
+.underline-dash {
+  position: relative;
+  margin-left: 0px !important;
+  .MuiInputBase-root {
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 16px !important;
+  }
+}
+
+.underline-dash::after {
+  content: "";
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed;
+}
+
+.end-day {
+  max-width: 18px;
+}
+
+.child-line {
+  font-family: "Times New Roman";
+  font-size: 16px;
+  display: block;
+  position: relative;
+  z-index: 1000;
+  width: 100%;
+  outline: unset;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
