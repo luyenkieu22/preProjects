@@ -28,7 +28,7 @@ const useStyles = makeStyles({
     },
 });
 
-const DialogSendLeader = ({ open, setOpen }) => {
+const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
     const { employee } = useSelector(state => state.employees)
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -51,6 +51,7 @@ const DialogSendLeader = ({ open, setOpen }) => {
 
     const handleCloseDialog = () => {
         setOpen(false);
+        setOpenRequest(false);
     };
 
     const handleSubmit = () => {
