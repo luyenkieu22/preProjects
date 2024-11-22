@@ -16,12 +16,13 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../../../../styles/views/_tabCurriculum.scss";
 
-const TabCurriculumVitae = ({ employeeData }) => {
+const TabCurriculumVitae = () => {
+    const { employee } = useSelector(state => state.employees)
     const { family, isLoading } = useSelector((state) => state.family);
     const dispatch = useDispatch();
     const fetchFamily = useCallback(() => {
-        dispatch(getFamilyByEmployeeIdAction(employeeData?.id));
-    }, [dispatch, employeeData.id]);
+        dispatch(getFamilyByEmployeeIdAction(employee?.id));
+    }, [dispatch, employee.id]);
 
     useEffect(() => {
         fetchFamily();
@@ -37,11 +38,11 @@ const TabCurriculumVitae = ({ employeeData }) => {
                             <Avatar
                                 className="image"
                                 src={
-                                    employeeData?.image
-                                        ? employeeData?.image
+                                    employee?.image
+                                        ? employee?.image
                                         : "/assets/images/avatar.jpg"
                                 }
-                                alt={employeeData?.name}
+                                alt={employee?.name}
                             />
                         </Grid>
                         <Grid item xs={7}>
@@ -70,7 +71,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         1.Họ và tên nhân viên:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {employeeData?.name}
+                                        {employee?.name}
                                     </span>
                                 </Grid>
                                 <Grid item xs={4} className="flex">
@@ -78,7 +79,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         2. Giới tính:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {GENDER[employeeData?.gender]?.name}
+                                        {GENDER[employee?.gender]?.name}
                                     </span>
                                 </Grid>
                             </Grid>
@@ -87,7 +88,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                     3. Ngày sinh:
                                 </span>
                                 <span className="underline__dotted text-md detail-content">
-                                    {moment(new Date(employeeData?.dateOfBirth)).format(
+                                    {moment(new Date(employee?.dateOfBirth)).format(
                                         "DD/MM/YYYY"
                                     )}
                                 </span>
@@ -97,14 +98,14 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                     4. Hộ khẩu thường trú:
                                 </span>
                                 <span className="underline__dotted text-md detail-content">
-                                    {employeeData?.address}
+                                    {employee?.address}
                                 </span>
                             </Grid>
                             <Grid xs={12} className="flex">
                                 <span className="text-md">
                                     5. Điên thoại liên lạc:
                                 </span>
-                                <span className="underline__dotted text-md detail-content">{employeeData?.phone}</span>
+                                <span className="underline__dotted text-md detail-content">{employee?.phone}</span>
                             </Grid>
                             <Grid container>
                                 <Grid item xs={12} md={6} className="flex">
@@ -112,7 +113,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         6.Dân tộc:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {employeeData?.ethnic}
+                                        {employee?.ethnic}
                                     </span>
                                 </Grid>
                                 <Grid item md={6} xs={12} className="flex">
@@ -120,7 +121,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         7. Tôn giáo:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {employeeData?.religion ? employeeData?.religion : "Không"}
+                                        {employee?.religion ? employee?.religion : "Không"}
                                     </span>
                                 </Grid>
                             </Grid>
@@ -130,7 +131,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         8. Căn cước công dân:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {employeeData?.citizenIdentificationNumber}
+                                        {employee?.citizenIdentificationNumber}
                                     </span>
                                 </Grid>
                                 <Grid item xs={12} md={6} className="flex">
@@ -138,7 +139,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                         9. Ngày cấp:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
-                                        {moment(employeeData?.dateOfIssuanceCard).format("DD/MM/YYYY")}
+                                        {moment(employee?.dateOfIssuanceCard).format("DD/MM/YYYY")}
                                     </span>
                                 </Grid>
                             </Grid>
@@ -147,7 +148,7 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                     10. Nơi cấp:
                                 </span>
                                 <span className="underline__dotted text-md detail-content">
-                                    {employeeData?.placeOfIssueCard}
+                                    {employee?.placeOfIssueCard}
                                 </span>
                             </Grid>
                         </div>
@@ -244,28 +245,28 @@ const TabCurriculumVitae = ({ employeeData }) => {
                                     <div className="type-date">
                                         <span className="vitae-place text-md"> ngày</span>
                                         <span className="type-content text-md underline__dotted">
-                                            {employeeData?.submitDay &&
-                                                moment(employeeData?.submitDay).format("DD/MM/YYYY").split("/")[0]}
+                                            {employee?.submitDay &&
+                                                moment(employee?.submitDay).format("DD/MM/YYYY").split("/")[0]}
                                         </span>
                                     </div>
                                     <div className="type-date">
                                         <span className="vitae-place text-md">tháng</span>
                                         <span className="type-content text-md underline__dotted">
-                                            {employeeData?.submitDay &&
-                                                moment(employeeData?.submitDay).format("DD/MM/YYYY").split("/")[1]}
+                                            {employee?.submitDay &&
+                                                moment(employee?.submitDay).format("DD/MM/YYYY").split("/")[1]}
                                         </span>
                                     </div>
                                     <div className="type-date">
                                         <span className="vitae-place text-md">năm</span>
                                         <span className="type-content text-md underline__dotted">
-                                            {employeeData?.submitDay &&
-                                                moment(employeeData?.submitDay).format("DD/MM/YYYY").split("/")[2]}
+                                            {employee?.submitDay &&
+                                                moment(employee?.submitDay).format("DD/MM/YYYY").split("/")[2]}
                                         </span>
                                     </div>
                                 </div>
                                 <h4 className="header-text footer-label">Người khai</h4>
                                 <span className="footer-notify">(Kí và ghi rõ họ tên)</span>
-                                <div className="footer-signature">{employeeData?.name}</div>
+                                <div className="footer-signature">{employee?.name}</div>
                             </div>
                         </Box>
                     </Box>

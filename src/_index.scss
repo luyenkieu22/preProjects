@@ -19,3 +19,19 @@ code {
   font-size: 16px;
   // color: rgba(255, 162, 0, 0.842);
 }
+
+::-webkit-scrollbar {
+  width: 8px; /* Độ rộng thanh cuộn */
+  scroll-behavior: smooth;
+}
+
+/* Thiết lập thiết kế của nút cuộn (thumb) */
+::-webkit-scrollbar-thumb {
+  background-color: #ababab;
+  border-radius: 6px;
+}
+
+/* Thiết lập màu nền của thanh cuộn */
+::-webkit-scrollbar-track {
+  opacity: 0;
+}

@@ -96,3 +96,14 @@ a:hover {
 .body-dialog {
   overflow-y: auto;
 }
+
+.text-wrapper-overflow {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-width: 200px;
+  max-width: 260px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

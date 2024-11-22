@@ -29,7 +29,7 @@ const DialogAdditionalRequest = ({ open, setOpen, data, handleAdditional }) => {
         <Dialog open={open} maxWidth={"sm"} fullWidth={true}>
             <DialogTitle id="draggable-dialog-title">
                 <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
-                    <span className="mb-10 styleColor">Yêu cầu bổ sung</span>
+                    <span className="mb-10">Yêu cầu bổ sung</span>
                     <IconButton
                         className="position-absolute r-10 t-10"
                         onClick={() => setOpen(false)}

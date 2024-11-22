@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     DialogActions,
     Button,
@@ -20,10 +20,9 @@ import TabCertificate from "./customTabs/TabCertificate";
 import DialogAdditionalRequest from "../../component/customDialog/DialogAdditionalRequest";
 import DialogApprove from "../../component/customDialog/DialogApprove";
 import DialogReject from "../../component/customDialog/DialogReject";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
 import DialogSendLeader from "../../component/customDialog/DialogSendLeader";
-import { getExperienceByEmployeeAction } from "app/redux/actions/experiencesAction";
 
 const useStyles = makeStyles({
     title: {
@@ -37,25 +36,20 @@ const useStyles = makeStyles({
 const DialogApprovalWaiting = ({
     open,
     setOpen,
-    employeeData,
     leader,
     canUpdate,
     sendLeader,
 }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const { employee } = useSelector(state => state.employees)
     const [tabStatus, setTabStatus] = useState(1);
     const [openDialogApproval, setOpenDialogApproval] = useState(false);
     const [openDialogAdditional, setOpenDialogAdditional] = useState(false);
     const [openDialogReject, setOpenDialogReject] = useState(false);
     const [openDialogSendLeader, setOpenDialogSendLeader] = useState(false);
-    const [activity, setActivity] = useState(employeeData?.activity);
-    const [skill, setSkill] = useState(employeeData?.skill);
-
-    useEffect(() => {
-        dispatch(getExperienceByEmployeeAction(employeeData?.id));
-    }, [dispatch, employeeData.id]);
-
+    const [activity, setActivity] = useState(employee?.activity);
+    const [skill, setSkill] = useState(employee?.skill);
 
     const handleCloseDialog = () => {
         setOpen(false);
@@ -68,7 +62,7 @@ const DialogApprovalWaiting = ({
     const handleApprove = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 appointmentDate: data?.appointmentDate,
                 submitProfileStatus: "3",
             })
@@ -79,7 +73,7 @@ const DialogApprovalWaiting = ({
     const handleAdditionalRequest = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 additionalRequest: data?.additionalRequest,
                 submitProfileStatus: "4",
             })
@@ -90,7 +84,7 @@ const DialogApprovalWaiting = ({
     const handleSaveCV = () => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 activity: activity,
                 skill: skill,
             })
@@ -99,7 +93,7 @@ const DialogApprovalWaiting = ({
     const handleReject = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 ...data,
                 submitProfileStatus: "5",
             })
@@ -145,7 +139,6 @@ const DialogApprovalWaiting = ({
                     <Grid item xs={10} style={{ height: "500px", overflow: "scroll" }}>
                         {tabStatus === 1 ? (
                             <TabCV
-                                employeeData={employeeData}
                                 canUpdate={canUpdate}
                                 skill={skill}
                                 setSkill={setSkill}
@@ -153,9 +146,9 @@ const DialogApprovalWaiting = ({
                                 setActivity={setActivity}
                             />
                         ) : tabStatus === 2 ? (
-                            <TabCurriculumVitae employeeData={employeeData} />
+                            <TabCurriculumVitae />
                         ) : (
-                            tabStatus === 3 && <TabCertificate employeeData={employeeData} />
+                            tabStatus === 3 && <TabCertificate />
                         )}
                     </Grid>
                 </Grid>
@@ -166,7 +159,7 @@ const DialogApprovalWaiting = ({
                         open={openDialogApproval}
                         setOpen={setOpenDialogApproval}
                         handleApprove={handleApprove}
-                        data={{ appointmentDate: employeeData?.appointmentDate || "" }}
+                        data={{ appointmentDate: employee?.appointmentDate || "" }}
                     />
                 )}
                 {openDialogAdditional && (
@@ -174,7 +167,7 @@ const DialogApprovalWaiting = ({
                         open={openDialogAdditional}
                         setOpen={setOpenDialogAdditional}
                         handleAdditional={handleAdditionalRequest}
-                        data={{ additionalRequest: employeeData?.additionalRequest || "" }}
+                        data={{ additionalRequest: employee?.additionalRequest || "" }}
                     />
                 )}
                 {openDialogReject && (
@@ -183,16 +176,16 @@ const DialogApprovalWaiting = ({
                         setOpen={setOpenDialogReject}
                         handleReject={handleReject}
                         data={{
-                            reasonForRejection: employeeData?.reasonForRejection || "",
-                            rejectionDate: employeeData?.rejectionDate || "",
+                            reasonForRejection: employee?.reasonForRejection || "",
+                            rejectionDate: employee?.rejectionDate || "",
                         }}
                     />
                 )}
                 {openDialogSendLeader && (
                     <DialogSendLeader
-                        employeeData={employeeData}
                         open={openDialogSendLeader}
                         setOpen={setOpenDialogSendLeader}
+                        setOpenRequest={setOpen}
                     />
                 )}
             </Grid>
@@ -204,7 +197,7 @@ const DialogApprovalWaiting = ({
                 >
                     Hủy
                 </Button>
-                {employeeData?.submitProfileStatus === "2" && leader && (
+                {employee?.submitProfileStatus === "2" && leader && (
                     <>
                         <Button
                             onClick={() => setOpenDialogReject(true)}

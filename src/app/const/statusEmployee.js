@@ -133,23 +133,23 @@ export const LEADER = [
 export const LEADER_POSITION = [
     {
         id: 0,
-        value: "Game Leader"
+        value: "Trưởng nhóm Game"
     },
     {
         id: 1,
-        value: "BE Leader"
+        value: "Trưởng nhóm Back-End"
     },
     {
         id: 2,
-        value: "Test Leader"
+        value: "Trưởng nhóm Test"
     },
     {
         id: 3,
-        value: "Mobile Leader"
+        value: "Trưởng nhóm Mobile"
     },
     {
         id: 4,
-        value: "FE Leader"
+        value: "Trưởng nhóm Front-End"
     }
 ]
 

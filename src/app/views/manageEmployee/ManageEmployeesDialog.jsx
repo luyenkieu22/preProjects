@@ -26,6 +26,7 @@ import TabSalaryIncrease from "./customTabs/TabSalaryIncrease";
 import TabPropose from "./customTabs/TabProposal";
 import TabProcess from "./customTabs/TabProcess";
 import FormEnd from "app/component/employeeForm/FormEnd";
+import { useSelector } from "react-redux";
 
 toast.configure({
     autoClose: 2000,
@@ -44,48 +45,48 @@ const useStyles = makeStyles({
 const ManageEmployeesDialog = ({
     open,
     setOpen,
-    employeeData,
-    setEmployeeData,
 }) => {
     const classes = useStyles();
+    const { employee } = useSelector(state => state.employees)
     const [statusTabs, setStatusTabs] = useState(1);
     const [changeTab, setChangeTab] = useState(false);
     const [showCV, setShowCV] = useState(false);
     const [endForm, setEndForm] = useState(false);
     const [employeeObject, setEmployeeObject] = useState({
-        id: employeeData?.id || "",
-        name: employeeData?.name || "",
-        code: employeeData?.code || "",
-        email: employeeData?.gender || "",
-        gender: employeeData?.dateOfBirth || "",
-        dateOfBirth: employeeData?.address || "",
-        address: employeeData?.team || "",
-        team: employeeData?.email || "",
-        image: employeeData?.image || "/assets/images/avatar.jpg",
-        phone: employeeData?.phone || "",
+        ...employee,
+        id: employee?.id || "",
+        name: employee?.name || "",
+        code: employee?.code || "",
+        email: employee?.gender || "",
+        gender: employee?.dateOfBirth || "",
+        dateOfBirth: employee?.address || "",
+        address: employee?.team || "",
+        team: employee?.email || "",
+        image: employee?.image || "/assets/images/avatar.jpg",
+        phone: employee?.phone || "",
         citizenIdentificationNumber:
-            employeeData?.citizenIdentificationNumber || "",
-        employeeFamilyDtos: employeeData?.employeeFamilyDtos || [],
-        certificatesDto: employeeData?.certificatesDto || [],
-        ethnic: employeeData?.ethnic || "",
-        religion: employeeData?.religion || "",
-        dateOfIssuanceCard: employeeData?.dateOfIssuanceCard || "",
-        placeOfIssueCard: employeeData?.placeOfIssueCard || "",
+            employee?.citizenIdentificationNumber || "",
+        employeeFamilyDtos: employee?.employeeFamilyDtos || [],
+        certificatesDto: employee?.certificatesDto || [],
+        ethnic: employee?.ethnic || "",
+        religion: employee?.religion || "",
+        dateOfIssuanceCard: employee?.dateOfIssuanceCard || "",
+        placeOfIssueCard: employee?.placeOfIssueCard || "",
     });
 
     useEffect(() => {
-        setChangeTab(employeeData?.id ? true : false);
-    }, [employeeData.id]);
+        setChangeTab(employee?.id ? true : false);
+    }, [employee.id]);
 
     useEffect(() => {
-        if (employeeData?.id) {
+        if (employee?.id) {
             setEmployeeObject({
                 ...employeeObject,
-                ...employeeData,
+                ...employee,
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [employeeData]);
+    }, [employee]);
 
     const handleChangeTab = (e, newTab) => {
         if (changeTab) {
@@ -101,7 +102,6 @@ const ManageEmployeesDialog = ({
 
     const handleCloseDialog = () => {
         setOpen(false);
-        setEmployeeData({});
         setEmployeeObject([]);
     };
 
@@ -283,15 +283,14 @@ const ManageEmployeesDialog = ({
                     <Tab label="Thăng chức" value={3} />
                 </Tabs>
                 {statusTabs === 1 ? (
-                    <TabSalaryIncrease employee={employeeObject} />
+                    <TabSalaryIncrease />
                 ) : statusTabs === 2 ? (
-                    <TabPropose employee={employeeObject} />
+                    <TabPropose />
                 ) : (
-                    statusTabs === 3 && <TabProcess employee={employeeObject} />
+                    statusTabs === 3 && <TabProcess />
                 )}
                 {showCV && (
                     <DialogApprovalWaiting
-                        employeeData={employeeData}
                         open={showCV}
                         setOpen={setShowCV}
                     />
@@ -302,7 +301,6 @@ const ManageEmployeesDialog = ({
                         setOpen={setEndForm}
                         setOpenDialog={setOpen}
                         canUpdate={true}
-                        employeeData={employeeData}
                     />
                 }
             </DialogContent>

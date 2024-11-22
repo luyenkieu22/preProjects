@@ -19,8 +19,8 @@ import { toast } from "react-toastify";
 import EmployeeInformation from "app/component/employeeTabs/EmployeeInformation";
 import CertificateInformation from "app/component/employeeTabs/CertificateInformation";
 import FamilyInformation from "app/component/employeeTabs/FamilyInformation";
-import { useDispatch } from "react-redux";
-import { uploadFileAction } from "app/redux/actions/employeesAction";
+import { useDispatch, useSelector } from "react-redux";
+import { editEmployeeAction, uploadFileAction } from "app/redux/actions/employeesAction";
 import DialogApprovalWaiting from "../Leader/DialogApprovalWaiting";
 import { STATUS_EMPLOYEE } from "app/const/statusEmployee";
 
@@ -42,53 +42,52 @@ const useStyles = makeStyles({
 const AddEmployeeDialog = ({
     open,
     setOpen,
-    employeeData,
-    setEmployeeData,
 }) => {
     const refInformation = useRef();
+    const { employee } = useSelector(
+        (state) => state.employees
+    );
     const classes = useStyles();
     const dispatch = useDispatch();
     const [statusTabs, setStatusTabs] = useState(1);
     const [changeTab, setChangeTab] = useState(false);
     const [sendLeaderDialog, setSendLeaderDialog] = useState(false);
-    // const { employee } = useSelector(
-    //     (state) => state.employees
-    // );
 
     const [employeeObject, setEmployeeObject] = useState({
-        id: employeeData?.id || "",
-        name: employeeData?.name || "",
-        code: employeeData?.code || "",
-        email: employeeData?.gender || "",
-        gender: employeeData?.dateOfBirth || "",
-        dateOfBirth: employeeData?.address || "",
-        address: employeeData?.team || "",
-        team: employeeData?.email || "",
-        image: employeeData?.image || "/assets/images/avatar.jpg",
-        phone: employeeData?.phone || "",
+        ...employee,
+        id: employee?.id || "",
+        name: employee?.name || "",
+        code: employee?.code || "",
+        email: employee?.gender || "",
+        gender: employee?.dateOfBirth || "",
+        dateOfBirth: employee?.address || "",
+        address: employee?.team || "",
+        team: employee?.email || "",
+        image: employee?.image || "/assets/images/avatar.jpg",
+        phone: employee?.phone || "",
         citizenIdentificationNumber:
-            employeeData?.citizenIdentificationNumber || "",
-        employeeFamilyDtos: employeeData?.employeeFamilyDtos || [],
-        certificatesDto: employeeData?.certificatesDto || [],
-        ethnic: employeeData?.ethnic || "",
-        religion: employeeData?.religion || "",
-        dateOfIssuanceCard: employeeData?.dateOfIssuanceCard || "",
-        placeOfIssueCard: employeeData?.placeOfIssueCard || "",
+            employee?.citizenIdentificationNumber || "",
+        employeeFamilyDtos: employee?.employeeFamilyDtos || [],
+        certificatesDto: employee?.certificatesDto || [],
+        ethnic: employee?.ethnic || "",
+        religion: employee?.religion || "",
+        dateOfIssuanceCard: employee?.dateOfIssuanceCard || "",
+        placeOfIssueCard: employee?.placeOfIssueCard || "",
     });
 
     useEffect(() => {
-        setChangeTab(employeeData?.id ? true : false);
-    }, [employeeData.id]);
+        setChangeTab(employee?.id ? true : false);
+    }, [employee.id]);
 
     useEffect(() => {
-        if (employeeData?.id) {
+        if (employee?.id) {
             setEmployeeObject({
                 ...employeeObject,
-                ...employeeData,
+                ...employee,
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [employeeData]);
+    }, [employee]);
 
     const handleChangeValue = (e) => {
         const { value, name } = e.target;
@@ -122,11 +121,11 @@ const AddEmployeeDialog = ({
 
     const handleSendLeader = () => {
         setSendLeaderDialog(true);
+        dispatch(editEmployeeAction(employeeObject))
     };
 
     const handleCloseDialog = () => {
         setOpen(false);
-        setEmployeeData({});
         setEmployeeObject([]);
     };
 
@@ -178,18 +177,17 @@ const AddEmployeeDialog = ({
                         handleChangeValue={handleChangeValue}
                     />
                 ) : statusTabs === 2 ? (
-                    <CertificateInformation employee={employeeObject} />
+                    <CertificateInformation />
                 ) : (
-                    statusTabs === 3 && <FamilyInformation employee={employeeObject} />
+                    statusTabs === 3 && <FamilyInformation />
                 )}
                 {sendLeaderDialog && (
                     <DialogApprovalWaiting
                         canUpdate={
-                            STATUS_EMPLOYEE.EDIT_CV.includes(employeeData?.submitProfileStatus)
+                            STATUS_EMPLOYEE.EDIT_CV.includes(employee?.submitProfileStatus)
                                 ? true
                                 : false
                         }
-                        employeeData={employeeData}
                         sendLeader={true}
                         open={sendLeaderDialog}
                         setOpen={setSendLeaderDialog}

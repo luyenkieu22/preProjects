@@ -233,16 +233,16 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
                     )}
                     {dialogAdditionalRequest && (
                         <DialogAdditionalRequest
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogAdditionalRequest}
+                            setOpen={setDialogAdditionalRequest}
                             data={{ additionalRequest: processObj?.additionalRequest || "" }}
                             handleAdditional={handleAdditional}
                         />
                     )}
                     {dialogReject && (
                         <DialogReject
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogReject}
+                            setOpen={setDialogReject}
                             data={{
                                 reasonForRefusal: processObj?.reasonForRefusal || "",
                                 rejectionDate: processObj?.rejectionDate || "",

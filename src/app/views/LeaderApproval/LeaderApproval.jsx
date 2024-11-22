@@ -7,9 +7,10 @@ import {
 import CustomTable from "app/component/CustomTable";
 import {
     searchEmployeesAction,
+    setEmployeeAction,
 } from "app/redux/actions/employeesAction";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
@@ -18,20 +19,18 @@ import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "../Leader/DialogApprovalWaiting";
 
 const LeaderApproval = ({ t }) => {
-
+    const { employees, totalElements, isLoading } = useSelector(
+        (state) => state.employees
+    );
+    const dispatch = useDispatch();
     const [pagnition, setPagnition] = useState({
         page: 0,
         rowsPerPage: 10,
     });
     const [openDialog, setOpenDialog] = useState(false);
     const [keyword, setKeyword] = useState("");
-    const [employeeData, setEmployeeData] = useState({});
-    const dispatch = useDispatch();
-    const { employees, totalElements, isLoading } = useSelector(
-        (state) => state.employees
-    );
 
-    const fetchEmployeesData = useCallback(() => {
+    const fetchEmployeesData = () => {
         const data = {
             keyword: keyword,
             pageIndex: pagnition.page + 1,
@@ -39,12 +38,12 @@ const LeaderApproval = ({ t }) => {
             listStatus: STATUS_EMPLOYEE.APPROVED,
         };
         dispatch(searchEmployeesAction(data));
-    }, [dispatch, pagnition.page, pagnition.rowsPerPage, keyword]);
+    }
 
     useEffect(() => {
         fetchEmployeesData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchEmployeesData, isLoading]);
+    }, [pagnition.page, pagnition.rowsPerPage, isLoading]);
 
     const handleSearchEmployee = () => {
         fetchEmployeesData();
@@ -52,7 +51,7 @@ const LeaderApproval = ({ t }) => {
 
     const handleViewEmployee = async (data) => {
         setOpenDialog(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
 
     const columns = [
@@ -94,6 +93,9 @@ const LeaderApproval = ({ t }) => {
             align: "left",
             minWidth: "200px",
             maxWidth: "200px",
+            render: (data) => <span className="text-wrapper-overflow">
+                {data?.name}
+            </span>
         },
         {
             title: "Ngày sinh",
@@ -131,14 +133,7 @@ const LeaderApproval = ({ t }) => {
             title: "Địa chỉ",
             field: "address",
             align: "left",
-            render: (data) => <span style={{
-                display: "inline-block",
-                minWidth: "200px",
-                maxWidth: "260px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-            }}>
+            render: (data) => <span className="text-wrapper-overflow">
                 {data?.address}
             </span>
         },
@@ -163,6 +158,7 @@ const LeaderApproval = ({ t }) => {
                         name="keyword"
                         placeholder="Nhập từ cần tìm kiếm"
                         onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+                        onKeyDown={e => e.key === "Enter" && fetchEmployeesData()}
                         className="w-100 my-8"
                         endAdornment={
                             <InputAdornment>
@@ -179,7 +175,6 @@ const LeaderApproval = ({ t }) => {
                         <DialogApprovalWaiting
                             open={openDialog}
                             setOpen={setOpenDialog}
-                            employeeData={employeeData}
                             leader={true}
                         />}
                     <CustomTable

@@ -23,7 +23,8 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useDispatch, useSelector } from "react-redux";
 import { getOldSalaryIncrease } from "utils";
 
-const TabSalaryIncrease = ({ employee }) => {
+const TabSalaryIncrease = () => {
+    const { employee } = useSelector(state => state.employees)
     const { salaryIncrease, totalElements, isLoading } = useSelector(
         (state) => state.salaryIncrease
     );

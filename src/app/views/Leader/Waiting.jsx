@@ -6,9 +6,9 @@ import {
     InputAdornment,
 } from "@material-ui/core";
 import CustomTable from "app/component/CustomTable";
-import { searchEmployeesAction } from "app/redux/actions/employeesAction";
+import { searchEmployeesAction, setEmployeeAction } from "app/redux/actions/employeesAction";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
@@ -21,6 +21,7 @@ import {
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "./DialogApprovalWaiting";
 import FormEnd from "app/component/employeeForm/FormEnd";
+import "../../../styles/views/_style.scss";
 
 const Waiting = () => {
     const [pagnition, setPagnition] = useState({
@@ -30,13 +31,12 @@ const Waiting = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogApplication, setOpenDialogApplication] = useState(false);
     const [keyword, setKeyword] = useState("");
-    const [employeeData, setEmployeeData] = useState({});
     const dispatch = useDispatch();
     const { employees, totalElements, isLoading } = useSelector(
         (state) => state.employees
     );
 
-    const fetchEmployeesData = useCallback(() => {
+    const fetchEmployeesData = () => {
         const data = {
             keyword: keyword,
             pageIndex: pagnition.page + 1,
@@ -44,13 +44,12 @@ const Waiting = () => {
             listStatus: STATUS_EMPLOYEE.WAITING_APPROVAL,
         };
         dispatch(searchEmployeesAction(data));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, pagnition.page, pagnition.rowsPerPage]);
+    }
 
     useEffect(() => {
         fetchEmployeesData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchEmployeesData, isLoading]);
+    }, [pagnition.page, pagnition.rowsPerPage, isLoading]);
 
     const handleSearchEmployee = () => {
         fetchEmployeesData();
@@ -58,11 +57,12 @@ const Waiting = () => {
 
     const handleApplicationForm = (data) => {
         setOpenDialogApplication(true);
+        dispatch(setEmployeeAction(data))
     };
 
     const handleViewEmployee = async (data) => {
         setOpenDialog(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
 
     const columns = [
@@ -120,6 +120,9 @@ const Waiting = () => {
             align: "left",
             minWidth: "200px",
             maxWidth: "200px",
+            render: (data) => <span className="text-wrapper-overflow">
+                {data?.name}
+            </span>
         },
         {
             title: "Ngày sinh",
@@ -158,16 +161,7 @@ const Waiting = () => {
             field: "address",
             align: "left",
             render: (data) => (
-                <span
-                    style={{
-                        display: "inline-block",
-                        minWidth: "200px",
-                        maxWidth: "240px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                    }}
-                >
+                <span className="text-wrapper-overflow">
                     {data?.address}
                 </span>
             ),
@@ -192,6 +186,7 @@ const Waiting = () => {
                         name="keyword"
                         placeholder="Nhập từ cần tìm kiếm"
                         onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+                        onKeyDown={e => e.key === "Enter" && fetchEmployeesData()}
                         className="w-100 my-8"
                         endAdornment={
                             <InputAdornment>
@@ -208,12 +203,10 @@ const Waiting = () => {
                         <DialogApprovalWaiting
                             open={openDialog}
                             setOpen={setOpenDialog}
-                            employeeData={employeeData}
                         />
                     )}
                     {openDialogApplication && (
                         <FormEnd
-                            employeeData={employeeData}
                             open={openDialogApplication}
                             setOpen={setOpenDialogApplication}
                             leader={true}

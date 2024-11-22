@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
     Button,
     Grid,
@@ -10,13 +12,9 @@ import CustomTable from "app/component/CustomTable";
 import {
     deleteEmployeeAction,
     searchEmployeesAction,
+    setEmployeeAction,
 } from "app/redux/actions/employeesAction";
-import { Breadcrumb } from "egret";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useCallback, useEffect } from "react";
-import { useState } from "react";
-import { Helmet } from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
 import AddEmployeeDialog from "./AddEmployeeDialog";
 import moment from "moment";
 import { GENDER, STATUS, STATUS_EMPLOYEE, TEAMS } from "app/const/statusEmployee";
@@ -24,9 +22,9 @@ import { useConfirm } from "app/component/useConfirm";
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "../Leader/DialogApprovalWaiting";
 import DialogNotifyRequest from "app/component/customDialog/DialogNotifyRequest";
+import "../../../styles/views/_style.scss";
 
 const AddEmployee = ({ t }) => {
-    const title = t("Dashboard.category");
     const [pagnition, setPagnition] = useState({
         page: 0,
         rowsPerPage: 10,
@@ -34,7 +32,6 @@ const AddEmployee = ({ t }) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogShowCV, setOpenDialogShowCV] = useState(false);
     const [openDialogNotifyRequest, setOpenDialogNotifyRequest] = useState(false);
-    const [employeeData, setEmployeeData] = useState({});
     const [keyword, setKeyword] = useState("");
     const [message, setMessage] = useState({ title: "", content: "" });
     const dispatch = useDispatch();
@@ -46,20 +43,20 @@ const AddEmployee = ({ t }) => {
         "Bạn có chắc chắn muốn xóa nhân viên này?"
     );
 
-    const fetchEmployeesData = useCallback(() => {
+    const fetchEmployeesData = () => {
         const data = {
             keyword: keyword,
             pageIndex: pagnition.page + 1,
             pageSize: pagnition.rowsPerPage,
             listStatus: STATUS_EMPLOYEE.ADD,
         };
-        dispatch(searchEmployeesAction(data));
-    }, [dispatch, pagnition.page, pagnition.rowsPerPage, keyword]);
+        dispatch(searchEmployeesAction(data))
+    }
 
     useEffect(() => {
         fetchEmployeesData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchEmployeesData, isLoading]);
+    }, [pagnition.page, pagnition.rowsPerPage, isLoading]);
 
     const handleSearchEmployee = () => {
         fetchEmployeesData();
@@ -67,12 +64,12 @@ const AddEmployee = ({ t }) => {
 
     const handleOpenDialog = (data) => {
         setOpenDialog(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
 
     const handleViewEmployee = (data) => {
         setOpenDialogShowCV(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
     const handleNotifyEmployee = (data) => {
         const additionalRequest = STATUS_EMPLOYEE.ADDITIONAL_REQUEST_NOTIFY.includes(data?.submitProfileStatus)
@@ -157,6 +154,9 @@ const AddEmployee = ({ t }) => {
             align: "left",
             minWidth: "200px",
             maxWidth: "200px",
+            render: (data) => <span className="text-wrapper-overflow">
+                {data?.name}
+            </span>
         },
         {
             title: "Ngày sinh",
@@ -174,7 +174,7 @@ const AddEmployee = ({ t }) => {
             align: "center",
             minWidth: "60px",
             maxWidth: "100px",
-            render: (data) => <span>{`${GENDER[data?.gender].name}`}</span>,
+            render: (data) => <span>{`${GENDER[data?.gender]?.name}`}</span>,
         },
         {
             title: "Nhóm",
@@ -194,14 +194,7 @@ const AddEmployee = ({ t }) => {
             title: "Địa chỉ",
             field: "address",
             align: "left",
-            render: (data) => <span style={{
-                display: "inline-block",
-                minWidth: "200px",
-                maxWidth: "260px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-            }}>
+            render: (data) => <span className="text-wrapper-overflow">
                 {data?.address}
             </span>
         },
@@ -209,9 +202,9 @@ const AddEmployee = ({ t }) => {
             title: "Trạng thái",
             field: "submitProfileStatus",
             align: "left",
-            minWidth: "140px",
+            minWidth: "160px",
             render: (data) => (
-                <span>{`${STATUS[data?.submitProfileStatus].name}`}</span>
+                <span>{`${STATUS[data?.submitProfileStatus]?.name}`}</span>
             ),
         },
     ];
@@ -236,6 +229,7 @@ const AddEmployee = ({ t }) => {
                         name="keyword"
                         placeholder="Nhập từ cần tìm kiếm"
                         onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+                        onKeyDown={e => e.key === "Enter" && fetchEmployeesData()}
                         className="w-100 my-6"
                         endAdornment={
                             <InputAdornment>
@@ -252,16 +246,12 @@ const AddEmployee = ({ t }) => {
                         <AddEmployeeDialog
                             open={openDialog}
                             setOpen={setOpenDialog}
-                            employeeData={employeeData}
-                            setEmployeeData={setEmployeeData}
                         />
                     )}
                     {openDialogShowCV && (
                         <DialogApprovalWaiting
                             open={openDialogShowCV}
                             setOpen={setOpenDialogShowCV}
-                            employeeData={employeeData}
-                            setEmployeeData={setEmployeeData}
                         />
                     )}
                     {openDialogNotifyRequest && (

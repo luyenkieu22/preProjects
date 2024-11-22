@@ -199,16 +199,16 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader }) => {
                     )}
                     {dialogAdditionalRequest && (
                         <DialogAdditionalRequest
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogAdditionalRequest}
+                            setOpen={setDialogAdditionalRequest}
                             data={{ additionalRequest: proposalObj?.additionalRequest || "" }}
                             handleAdditional={handleAdditional}
                         />
                     )}
                     {dialogReject && (
                         <DialogReject
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogReject}
+                            setOpen={setDialogReject}
                             data={{
                                 reasonForRefusal: proposalObj?.reasonForRefusal || "",
                                 rejectionDate: proposalObj?.rejectionDate || ""

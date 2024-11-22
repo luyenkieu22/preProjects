@@ -1,4 +1,4 @@
-import { uploadFileRequest } from "../reducers/EmployeesReducer";
+import { setEmployeeReducer, uploadFileRequest } from "../reducers/EmployeesReducer";
 import { TypesEmployees } from "../sagas/types";
 
 const createAction = (type, payload = null) => ({
@@ -25,4 +25,8 @@ export const uploadFileAction = (data) => {
     const formData = new FormData();
     formData.append('file', data);
     return uploadFileRequest(formData)
+}
+
+export const setEmployeeAction = (data) => {
+    return setEmployeeReducer(data)
 }

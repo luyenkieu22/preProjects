@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Button,
     Grid,
     Icon,
     IconButton,
@@ -10,10 +9,9 @@ import {
 import CustomTable from "app/component/CustomTable";
 import {
     searchEmployeesAction,
+    setEmployeeAction,
 } from "app/redux/actions/employeesAction";
-import { Breadcrumb } from "egret";
 import SearchIcon from "@material-ui/icons/Search";
-import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { GENDER, STATUS, STATUS_EMPLOYEE, TEAMS } from "app/const/statusEmployee";
@@ -21,9 +19,12 @@ import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "../Leader/DialogApprovalWaiting";
 import DialogNotifyRequest from "app/component/customDialog/DialogNotifyRequest";
 import ManageEmployeesDialog from "./ManageEmployeesDialog";
+import "../../../styles/views/_style.scss";
 
 const ManageEmployee = ({ t }) => {
-    const title = t('Dashboard.category');
+    const { employees, totalElements, isLoading } = useSelector(
+        (state) => state.employees
+    );
     const [pagnition, setPagnition] = useState({
         page: 0,
         rowsPerPage: 10,
@@ -31,15 +32,11 @@ const ManageEmployee = ({ t }) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogShowCV, setOpenDialogShowCV] = useState(false);
     const [openDialogNotifyRequest, setOpenDialogNotifyRequest] = useState(false);
-    const [employeeData, setEmployeeData] = useState({});
     const [keyword, setKeyword] = useState("");
     const [message, setMessage] = useState({ title: "", content: "" });
     const dispatch = useDispatch();
-    const { employees, totalElements, isLoading } = useSelector(
-        (state) => state.employees
-    );
 
-    const fetchEmployeesData = useCallback(() => {
+    const fetchEmployeesData = () => {
         const data = {
             keyword: keyword,
             pageIndex: pagnition.page + 1,
@@ -47,12 +44,12 @@ const ManageEmployee = ({ t }) => {
             listStatus: STATUS_EMPLOYEE.MANAGE,
         };
         dispatch(searchEmployeesAction(data));
-    }, [dispatch, pagnition.page, pagnition.rowsPerPage, keyword]);
+    }
 
     useEffect(() => {
         fetchEmployeesData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchEmployeesData, isLoading]);
+    }, [pagnition.page, pagnition.rowsPerPage, isLoading]);
 
     const handleSearchEmployee = () => {
         fetchEmployeesData();
@@ -60,12 +57,12 @@ const ManageEmployee = ({ t }) => {
 
     const handleOpenDialog = (data) => {
         setOpenDialog(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
 
     const handleViewEmployee = (data) => {
         setOpenDialogShowCV(true);
-        setEmployeeData(data);
+        dispatch(setEmployeeAction(data))
     };
     const handleNotifyEmployee = (data) => {
         const additionalRequest = STATUS_EMPLOYEE.ADDITIONAL_REQUEST_NOTIFY.includes(data?.submitProfileStatus)
@@ -135,6 +132,9 @@ const ManageEmployee = ({ t }) => {
             align: "left",
             minWidth: "200px",
             maxWidth: "200px",
+            render: (data) => <span className="text-wrapper-overflow">
+                {data?.name}
+            </span>
         },
         {
             title: "Ngày sinh",
@@ -152,7 +152,7 @@ const ManageEmployee = ({ t }) => {
             align: "center",
             minWidth: "60px",
             maxWidth: "100px",
-            render: (data) => <span>{`${GENDER[data?.gender].name}`}</span>,
+            render: (data) => <span>{`${GENDER[data?.gender]?.name}`}</span>,
         },
         {
             title: "Nhóm",
@@ -172,14 +172,7 @@ const ManageEmployee = ({ t }) => {
             title: "Địa chỉ",
             field: "address",
             align: "left",
-            render: (data) => <span style={{
-                display: "inline-block",
-                minWidth: "200px",
-                maxWidth: "260px",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-            }}>
+            render: (data) => <span className="text-wrapper-overflow">
                 {data?.address}
             </span>
         },
@@ -204,6 +197,7 @@ const ManageEmployee = ({ t }) => {
                         name="keyword"
                         placeholder="Nhập từ cần tìm kiếm"
                         onChange={(e) => setKeyword(e.target.value.toLowerCase())}
+                        onKeyDown={e => e.key === "Enter" && fetchEmployeesData()}
                         className="w-100 my-6"
                         endAdornment={
                             <InputAdornment>
@@ -220,16 +214,12 @@ const ManageEmployee = ({ t }) => {
                         <ManageEmployeesDialog
                             open={openDialog}
                             setOpen={setOpenDialog}
-                            employeeData={employeeData}
-                            setEmployeeData={setEmployeeData}
                         />
                     )}
                     {openDialogShowCV && (
                         <DialogApprovalWaiting
                             open={openDialogShowCV}
                             setOpen={setOpenDialogShowCV}
-                            employeeData={employeeData}
-                            setEmployeeData={setEmployeeData}
                         />
                     )}
                     {openDialogNotifyRequest && (

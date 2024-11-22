@@ -9,7 +9,8 @@ import { addFamilyAction, deleteFamilyAction, editFamilyAction, getFamilyByEmplo
 import { GENDER, RELATIONSHIP } from 'app/const/statusEmployee'
 import { regexAddress, regexName } from 'app/const/regex'
 
-const FamilyInformation = ({ employee }) => {
+const FamilyInformation = () => {
+    const { employee } = useSelector(state => state.employees)
     const { family, isLoading } = useSelector(state => state.family)
     const dispatch = useDispatch()
     const [DialogConfirm, confirm] = useConfirm(

@@ -19,7 +19,7 @@ import DialogApprove from "../customDialog/DialogApprove";
 import { POSITION } from "app/const/statusEmployee";
 import DialogAdditionalRequest from "../customDialog/DialogAdditionalRequest";
 import DialogReject from "../customDialog/DialogReject";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
 
 const useStyles = makeStyles({
@@ -36,21 +36,22 @@ const FormEnd = ({
     setOpenDialog,
     canUpdate,
     leader,
-    employeeData,
 }) => {
     const classes = useStyles();
+    const { employee } = useSelector(state => state.employees)
     const [endDate, setEndDate] = useState(
-        employeeData?.endDay
-            ? moment(employeeData?.endDay).format("YYYY-MM-DD")
+        employee?.endDay
+            ? moment(employee?.endDay).format("YYYY-MM-DD")
             : moment().format("YYYY-MM-DD")
     );
     const [reason, setReason] = useState(
-        employeeData?.reasonForEnding || "Vì lý do: "
+        employee?.reasonForEnding || "Vì lý do: "
     );
     const [dialogApproval, setDialogApproval] = useState(false);
     const [dialogAdditionalRequest, setDialogAdditionalRequest] = useState(false);
     const [dialogReject, setDialogReject] = useState(false);
     const dispatch = useDispatch();
+    const dateCustom = moment(endDate).format("DD/MM/YYYY").split("/");
 
     const handleChangeValue = (e) => {
         const value = e.target.value;
@@ -68,7 +69,7 @@ const FormEnd = ({
     const handleApprove = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 terminationAppointmentDate: data?.terminationAppointmentDate,
                 submitProfileStatus: 7,
             })
@@ -79,7 +80,7 @@ const FormEnd = ({
     const handleAdditional = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 ...data,
                 additionalRequestTermination: data?.additionalRequestTermination,
                 submitProfileStatus: 8,
@@ -90,7 +91,7 @@ const FormEnd = ({
     const handleReject = (data) => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 ...data,
                 submitProfileStatus: 9,
             })
@@ -101,7 +102,7 @@ const FormEnd = ({
     const handleSendLeader = () => {
         dispatch(
             editEmployeeAction({
-                ...employeeData,
+                ...employee,
                 endDay: endDate,
                 submitProfileStatus: 6,
             })
@@ -144,21 +145,19 @@ const FormEnd = ({
                         Kính gửi: Ban giám đốc công ty{" "}
                         <span className="font-bold">OCEANTEACH</span>
                     </Typography>
-                    <Typography className="">Tên tôi là: {employeeData?.name}</Typography>
+                    <Typography className="">Tên tôi là: {employee?.name}</Typography>
                     <Typography className="">
                         Hiện tại đang là{" "}
                         {
                             POSITION.find(
-                                (item) => item.id === employeeData?.currentPosition ?? 1
+                                (item) => item.id === employee?.currentPosition ?? 1
                             )?.value
                         }
                     </Typography>
                     <Box className="flex">
                         <Typography>
                             Tôi làm đơn này, đề nghị Ban Giám Đốc cho tôi xin nghỉ việc từ
-                            ngày {moment(endDate).format("DD/MM/YYYY").split("/")[0]}
-                            tháng {moment(endDate).format("DD/MM/YYYY").split("/")[1]}
-                            năm {moment(endDate).format("DD/MM/YYYY").split("/")[2]}
+                            ngày {dateCustom[0]} tháng {dateCustom[1]} năm {dateCustom[2]}
                         </Typography>
                         {canUpdate && (
                             <TextField
@@ -182,7 +181,7 @@ const FormEnd = ({
                         />
                     </Box>
                     <Typography className="mb-12">
-                        Trong thời gian chờ đợi sự chấp nhận của Ban Giám Đốc Công ty, tôi sẽ tiếp tục làm việc nghiêm túc và chấp hành bàn giao công việc cũng như tài sản cho người quảng lý trực tiếp của tôi là ông/bà <span className="font-bold">{employeeData?.leaderName}</span>
+                        Trong thời gian chờ đợi sự chấp nhận của Ban Giám Đốc Công ty, tôi sẽ tiếp tục làm việc nghiêm túc và chấp hành bàn giao công việc cũng như tài sản cho người quảng lý trực tiếp của tôi là ông/bà <span className="font-bold">{employee?.leaderName}</span>
                     </Typography>
                     <Typography>
                         Tôi xin chân thành cảm ơn!
@@ -203,7 +202,7 @@ const FormEnd = ({
                                 (Ký, ghi rõ họ tên)
                             </Typography>
                             <div className="mt-32 flex-center">
-                                <span className="sign-text">{employeeData?.name}</span>
+                                <span className="sign-text">{employee?.name}</span>
                             </div>
                         </Box>
                     </Box>
@@ -211,7 +210,7 @@ const FormEnd = ({
                         <DialogApprove
                             open={dialogApproval}
                             setOpen={setDialogApproval}
-                            data={{ terminationAppointmentDate: employeeData?.terminationAppointmentDate || "" }}
+                            data={{ terminationAppointmentDate: employee?.terminationAppointmentDate || "" }}
                             handleApprove={handleApprove}
                         />
                     )}
@@ -219,7 +218,7 @@ const FormEnd = ({
                         <DialogAdditionalRequest
                             open={dialogAdditionalRequest}
                             setOpen={setDialogAdditionalRequest}
-                            data={{ additionalRequestTermination: employeeData?.additionalRequestTermination || "" }}
+                            data={{ additionalRequestTermination: employee?.additionalRequestTermination || "" }}
                             handleAdditional={handleAdditional}
                         />
                     )}
@@ -228,8 +227,8 @@ const FormEnd = ({
                             open={dialogReject}
                             setOpen={setDialogReject}
                             data={{
-                                reasonForRefuseEndProfile: employeeData?.reasonForRefuseEndProfile || "",
-                                refuseEndProfileDay: employeeData?.refuseEndProfileDay || "",
+                                reasonForRefuseEndProfile: employee?.reasonForRefuseEndProfile || "",
+                                refuseEndProfileDay: employee?.refuseEndProfileDay || "",
                             }}
                             handleReject={handleReject}
                         />

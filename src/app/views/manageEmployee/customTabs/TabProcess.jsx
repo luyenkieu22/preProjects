@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, Icon, IconButton, MenuItem } from "@material-ui/core";
 import { Visibility } from "@material-ui/icons";
-import DialogApprovalWaiting from "app/views/Leader/DialogApprovalWaiting";
 import DialogNotifyRequest from "app/component/customDialog/DialogNotifyRequest";
 import CustomTable from "app/component/CustomTable";
 import { useConfirm } from "app/component/useConfirm";
@@ -12,7 +11,8 @@ import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui
 import { addProcessAction, deleteProcessAction, editProcessAction, getProcessByEmployeeIdAction } from "app/redux/actions/processAction";
 import FormProcess from "app/component/employeeForm/FormProcess";
 
-const TabProcess = ({ employee }) => {
+const TabProcess = () => {
+    const { employee } = useSelector(state => state.employees)
     const { process, totalElements, isLoading } = useSelector(state => state.process)
     const dispatch = useDispatch()
     const initialValue = {

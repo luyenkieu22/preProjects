@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Button,
@@ -24,11 +24,11 @@ import { useDispatch, useSelector } from "react-redux";
 import DialogExperience from "../../../component/customDialog/DialogExperience";
 import {
     deleteExperienceAction,
+    getExperienceByEmployeeAction,
 } from "app/redux/actions/experiencesAction";
 import { useConfirm } from "app/component/useConfirm";
 
 const TabCV = ({
-    employeeData,
     skill,
     activity,
     setSkill,
@@ -36,8 +36,9 @@ const TabCV = ({
     canUpdate,
 }) => {
     const classes = useStyle();
+    const { employee } = useSelector(state => state.employees)
     const { certificates } = useSelector((state) => state.certificates);
-    const { experiences } = useSelector((state) => state.experiences);
+    const { experiences, isLoading } = useSelector((state) => state.experiences);
     const dispatch = useDispatch();
     const [listSkill, setListSkill] = useState(skill ? skill.split("\n") : []);
     const [listActivity, setListActivity] = useState(
@@ -51,15 +52,20 @@ const TabCV = ({
         "Xác nhận xóa",
         "Bạn có chắc chắn muốn xóa kinh nghiệm này không?"
     );
+
+    useEffect(() => {
+        dispatch(getExperienceByEmployeeAction(employee?.id));
+    }, [dispatch, employee.id, isLoading]);
+
     const handleSaveActivity = () => {
-        setListActivity(skill.split("\n"));
+        setListActivity(activity.split("\n"));
         setUpdateActivity(false);
     };
 
     const handleDeleteExperience = async () => {
         const ok = await confirm();
         if (!ok) return;
-        dispatch(deleteExperienceAction(employeeData?.id));
+        dispatch(deleteExperienceAction(employee?.id));
     };
     const handleUpdateExperience = (data) => {
         setExperience(data);
@@ -74,27 +80,27 @@ const TabCV = ({
         {
             item: <PhoneIcon className={classes.icon} />,
             label: "Số điện thoại",
-            value: employeeData?.phone,
+            value: employee?.phone,
         },
         {
             item: <MailIcon className={classes.icon} />,
             label: "Email",
-            value: employeeData?.email,
+            value: employee?.email,
         },
         {
             item: <HomeIcon className={classes.icon} />,
             label: "Địa chỉ",
-            value: employeeData?.address,
+            value: employee?.address,
         },
         {
             item: <CalendarTodayIcon className={classes.icon} />,
             label: "Ngày sinh",
-            value: moment(new Date(employeeData?.dateOfBirth)).format("DD/MM/YYYY"),
+            value: moment(new Date(employee?.dateOfBirth)).format("DD/MM/YYYY"),
         },
         {
             item: <ErrorIcon className={classes.icon} />,
             label: "Giới tính",
-            value: GENDER[employeeData?.gender]?.name,
+            value: GENDER[employee?.gender]?.name,
         },
     ];
 
@@ -112,8 +118,8 @@ const TabCV = ({
                                 border: "1px solid #cccccc",
                             }}
                             src={
-                                employeeData?.image
-                                    ? employeeData?.image
+                                employee?.image
+                                    ? employee?.image
                                     : "/assets/images/avatar.jpg"
                             }
                             alt="avatar"
@@ -127,10 +133,10 @@ const TabCV = ({
                                     fontWeight: "600",
                                 }}
                             >
-                                {employeeData?.name}
+                                {employee?.name}
                             </Typography>
                             <Typography className={classes.textTitle}>
-                                {POSITION[employeeData?.currentPosition]?.value}
+                                {POSITION[employee?.currentPosition]?.value}
                             </Typography>
                         </Grid>
                         <Grid item xs={11} style={{ marginTop: "20px" }}>
@@ -170,7 +176,7 @@ const TabCV = ({
                                     data={experience}
                                     setData={setExperience}
                                     setOpen={setExperienceDialog}
-                                    idEmployee={employeeData?.id}
+                                    idEmployee={employee?.id}
                                 />
                             )}
                             {experiences?.map((experience) => (

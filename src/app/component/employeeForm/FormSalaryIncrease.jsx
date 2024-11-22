@@ -188,16 +188,16 @@ const FormSalaryIncrease = ({
                     )}
                     {dialogAdditionalRequest && (
                         <DialogAdditionalRequest
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogAdditionalRequest}
+                            setOpen={setDialogAdditionalRequest}
                             data={{ additionalRequest: salaryObj?.additionalRequest || "" }}
                             handleAdditional={handleAdditional}
                         />
                     )}
                     {dialogReject && (
                         <DialogReject
-                            open={dialogApproval}
-                            setOpen={setDialogApproval}
+                            open={dialogReject}
+                            setOpen={setDialogReject}
                             data={{
                                 reasonForRefusal: salaryObj?.reasonForRefusal || "",
                                 rejectionDate: salaryObj?.rejectionDate || ""

@@ -8,8 +8,8 @@ import { addCertificateAction, deleteCertificateAction, editCertificateAction, g
 import { useConfirm } from '../useConfirm'
 import { regexName } from 'app/const/regex'
 
-const CertificateInformation = ({ employee }) => {
-
+const CertificateInformation = () => {
+    const { employee } = useSelector(state => state.employees)
     const { certificates, isLoading } = useSelector(state => state.certificates)
     const dispatch = useDispatch()
     const [certificatesObject, setCertificatesObject] = useState({

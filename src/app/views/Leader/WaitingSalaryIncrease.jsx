@@ -15,7 +15,6 @@ import {
 } from "app/const/statusEmployee";
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "./DialogApprovalWaiting";
-import FormEnd from "app/component/employeeForm/FormEnd";
 import { getCertificateByEmployeeAction } from "app/redux/actions/certificatesAction";
 import { getFamilyByEmployeeIdAction } from "app/redux/actions/familyAction";
 import { getSalaryIncreaseByLeaderAction } from "app/redux/actions/salaryIncreaseAction";

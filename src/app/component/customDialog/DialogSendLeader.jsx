@@ -17,7 +17,7 @@ import { editEmployeeAction } from "app/redux/actions/employeesAction";
 import moment from "moment";
 import React, { useState } from "react";
 import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles({
     titleDialog: {
@@ -28,14 +28,25 @@ const useStyles = makeStyles({
     },
 });
 
-const DialogSendLeader = ({ open, setOpen, employeeData }) => {
+const DialogSendLeader = ({ open, setOpen }) => {
+    const { employee } = useSelector(state => state.employees)
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({ ...employeeData });
+    const [formData, setFormData] = useState({ ...employee });
 
     const handleChangeValue = (e) => {
         const { value, name } = e.target;
-        setFormData({ ...formData, [name]: value });
+        if (name === "leaderId") {
+            const newLeader = LEADER.find(leader => leader.id === value);
+            setFormData({
+                ...formData,
+                leaderPosition: newLeader.leaderPosition,
+                leaderName: newLeader.leaderName,
+                [name]: value
+            })
+        } else {
+            setFormData({ ...formData, [name]: value });
+        }
     };
 
     const handleCloseDialog = () => {
@@ -88,6 +99,9 @@ const DialogSendLeader = ({ open, setOpen, employeeData }) => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                inputProps={{
+                                    min: moment().format("YYYY-MM-DD")
+                                }}
                                 validators={["required"]}
                                 errorMessages={["Ngày nộp không được để trống"]}
                             />
@@ -95,6 +109,7 @@ const DialogSendLeader = ({ open, setOpen, employeeData }) => {
                         <Grid item xs={4}>
                             <SelectValidator
                                 size="small"
+                                fullWidth
                                 label={
                                     <span>
                                         <span style={{ color: "red" }}> * </span>
@@ -119,6 +134,7 @@ const DialogSendLeader = ({ open, setOpen, employeeData }) => {
                         <Grid item xs={4}>
                             <SelectValidator
                                 size="small"
+                                fullWidth
                                 label={
                                     <span>
                                         <span style={{ color: "red" }}> * </span>

@@ -31,13 +31,14 @@ export const employeesSlice = createSlice({
             return {
                 ...state,
                 employee: { ...action.payload },
-                reload: true
+                isLoading: true
             }
         },
 
         editEmployeeReducer: (state, action) => {
             return {
                 ...state,
+                employee: { ...action.payload },
                 isLoading: true
             }
         },
@@ -52,6 +53,13 @@ export const employeesSlice = createSlice({
         uploadFileRequest: (state, action) => {
             state.file = action.payload;
         },
+
+        setEmployeeReducer: (state, action) => {
+            return {
+                ...state,
+                employee: { ...action.payload },
+            }
+        },
     },
 });
 
@@ -62,7 +70,8 @@ export const {
     addEmployeeReducer,
     editEmployeeReducer,
     deleteEmployeeReducer,
-    uploadFileRequest
+    uploadFileRequest,
+    setEmployeeReducer
 } = employeesSlice.actions;
 
 export default employeesSlice.reducer;

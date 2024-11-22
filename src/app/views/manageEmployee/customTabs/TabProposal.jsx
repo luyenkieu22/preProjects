@@ -11,7 +11,8 @@ import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui
 import { addProposalAction, deleteProposalAction, editProposalAction, getProposalByEmployeeAction } from "app/redux/actions/proposalAction";
 import FormProposal from "app/component/employeeForm/FormProposal";
 
-const TabPropose = ({ employee }) => {
+const TabPropose = () => {
+    const { employee } = useSelector(state => state.employees)
     const { proposal, totalElements, isLoading } = useSelector(state => state.proposal)
     const dispatch = useDispatch()
     const initialValue = {
