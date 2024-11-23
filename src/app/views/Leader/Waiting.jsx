@@ -74,7 +74,7 @@ const Waiting = () => {
             render: (rowData) => {
                 return (
                     <div style={{ display: "flex", justifyContent: "center" }}>
-                        {STATUS_EMPLOYEE.WAITING_END_PROCESS.includes(
+                        {STATUS_EMPLOYEE.WAITING_APPROVAL.includes(
                             rowData.submitProfileStatus
                         ) && (
                                 <IconButton
@@ -86,7 +86,7 @@ const Waiting = () => {
                                     </Icon>
                                 </IconButton>
                             )}
-                        {STATUS_EMPLOYEE.WAITING_APPROVAL.includes(
+                        {STATUS_EMPLOYEE.WAITING_END_PROCESS.includes(
                             rowData.submitProfileStatus
                         ) && (
                                 <IconButton
@@ -206,7 +206,7 @@ const Waiting = () => {
                         />
                     )}
                     {openDialogApplication && (
-                        <FormEnd
+                        <DialogApprovalWaiting
                             open={openDialogApplication}
                             setOpen={setOpenDialogApplication}
                             leader={true}

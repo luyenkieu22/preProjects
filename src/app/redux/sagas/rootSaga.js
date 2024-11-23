@@ -6,6 +6,7 @@ import watchExperienceSaga from "./ExperienceSaga";
 import watchSalaryIncreaseSaga from "./SalaryIncreaseSaga";
 import watchProcessSaga from "./ProcessSaga";
 import watchProposalSaga from "./ProposalSaga";
+import watchLeaderSaga from "./LeaderSaga";
 
 export function* rootSaga() {
     yield all([
@@ -16,5 +17,6 @@ export function* rootSaga() {
         watchSalaryIncreaseSaga(),
         watchProcessSaga(),
         watchProposalSaga(),
+        watchLeaderSaga(),
     ]);
 }

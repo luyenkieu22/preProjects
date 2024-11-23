@@ -57,3 +57,7 @@ export const TypeProposal = {
     EDIT_PROPOSAL: "EDIT_PROPOSAL",
     DELETE_PROPOSAL: "DELETE_PROPOSAL",
 }
+
+export const TypeLeader = {
+    GET_LEADER_ALL: "GET_LEADER_ALL",
+}

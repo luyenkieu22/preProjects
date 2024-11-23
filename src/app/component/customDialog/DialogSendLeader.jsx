@@ -12,10 +12,11 @@ import {
     MenuItem,
     Typography,
 } from "@material-ui/core";
-import { LEADER, LEADER_POSITION } from "app/const/statusEmployee";
+import { LEADER_POSITION } from "app/const/statusEmployee";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
+import { getLeaderAction } from "app/redux/actions/leaderAction";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -30,18 +31,25 @@ const useStyles = makeStyles({
 
 const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
     const { employee } = useSelector(state => state.employees)
+    const { leader } = useSelector(state => state.leader)
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({ ...employee });
+    const [formData, setFormData] = useState({ ...employee, leaderId: leader?.id });
+
+    useEffect(() => {
+        dispatch(getLeaderAction())
+    }, [dispatch])
+
 
     const handleChangeValue = (e) => {
         const { value, name } = e.target;
         if (name === "leaderId") {
-            const newLeader = LEADER.find(leader => leader.id === value);
+            const newLeader = leader.find(leader => leader?.id === value);
             setFormData({
                 ...formData,
                 leaderPosition: newLeader.leaderPosition,
                 leaderName: newLeader.leaderName,
+                leaderId: newLeader.leaderId,
                 [name]: value
             })
         } else {
@@ -125,9 +133,9 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 validators={["required"]}
                                 errorMessages={["Tên lãnh đạo không được để trống"]}
                             >
-                                {LEADER.map((leader) => (
-                                    <MenuItem value={leader.id} key={leader.id}>
-                                        {leader.leaderName}
+                                {leader?.map((item) => (
+                                    <MenuItem value={item.id} key={item.id}>
+                                        {item?.leaderName}
                                     </MenuItem>
                                 ))}
                             </SelectValidator>

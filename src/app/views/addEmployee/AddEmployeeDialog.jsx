@@ -54,7 +54,6 @@ const AddEmployeeDialog = ({
     const [sendLeaderDialog, setSendLeaderDialog] = useState(false);
 
     const [employeeObject, setEmployeeObject] = useState({
-        ...employee,
         id: employee?.id || "",
         name: employee?.name || "",
         code: employee?.code || "",
