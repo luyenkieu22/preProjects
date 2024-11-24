@@ -135,7 +135,7 @@ const CertificateInformation = () => {
                             label={
                                 <span style={{ color: "black" }}>
                                     <span style={{ color: "red" }}> * </span>
-                                    Tên nhân viên
+                                    Tên chứng chỉ
                                 </span>
                             }
                             fullWidth
@@ -146,8 +146,8 @@ const CertificateInformation = () => {
                             value={certificatesObject.certificateName}
                             validators={["required", `matchRegexp:${regexName}`]}
                             errorMessages={[
-                                "Tên nhân viên không được để trống",
-                                "Tên nhân viên không chứa ký tự đặc biệt và các chữ số"
+                                "Tên chứng chỉ không được để trống",
+                                "Tên chứng chỉ không chứa ký tự đặc biệt và các chữ số"
                             ]}
                         />
                     </Grid>

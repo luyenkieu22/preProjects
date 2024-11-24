@@ -84,6 +84,7 @@ const TabProcess = () => {
         if (processObj?.id) {
             dispatch(editProcessAction({
                 ...processObj,
+                processStatus: 2,
                 promotionDay: moment().format("YYYY-MM-DD")
             }))
         } else {

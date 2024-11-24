@@ -34,6 +34,7 @@ const TabSalaryIncrease = () => {
         reason: "",
         currentPosition: employee?.currentPosition || "",
         note: "",
+        oldSalary: 0,
         newSalary: "",
         leaderId: employee?.leaderId || "",
     };
@@ -47,6 +48,8 @@ const TabSalaryIncrease = () => {
         page: 0,
         rowsPerPage: 5,
     });
+    console.log(oldSalaryIncrease !== null ? oldSalaryIncrease : 0);
+
     const [ConfirmDialog, confirm] = useConfirm(
         "Xác nhận xóa",
         "Bạn có muốn xóa thông tin này không!"
@@ -112,13 +115,14 @@ const TabSalaryIncrease = () => {
                 editSalaryIncreaseAction({
                     ...salaryObj,
                     startDate: moment().format("YYYY-MM-DD"),
-                    oldSalary: oldSalaryIncrease,
+                    oldSalary: oldSalaryIncrease !== null ? oldSalaryIncrease : 0,
+                    salaryIncreaseStatus: 2
                 })
             );
         } else {
             dispatch(
                 addSalaryIncreaseAction(
-                    { ...salaryObj, oldSalary: oldSalaryIncrease },
+                    { ...salaryObj, oldSalary: oldSalaryIncrease !== null ? oldSalaryIncrease : 0 },
                     employee?.id
                 )
             );

@@ -43,7 +43,7 @@ export const RELATIONSHIP = [
 export const STATUS_EMPLOYEE = {
     ADD: "1,2,4,5",
     MANAGE: "3,6,8,9",
-    EDIT: "1,4,5,8,9",
+    EDIT: "1,3,4,5,8,9",
     VIEW: "2,3,4,5,6,7,8",
     DELETE: "1",
     WAITING_APPROVAL: "2,6",

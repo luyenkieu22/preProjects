@@ -23,6 +23,7 @@ const DialogAdditionalRequest = ({ open, setOpen, data, handleAdditional }) => {
     const handleSubmit = () => {
         setOpen(false);
         handleAdditional(item);
+
     };
 
     return (

@@ -51,7 +51,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
             editProcessAction({
                 ...processObj,
                 acceptanceDate: data.acceptanceDate,
-                proposalStatus: 3,
+                processStatus: 3,
             })
         );
         setOpen(false);
@@ -62,7 +62,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
             editProcessAction({
                 ...processObj,
                 additionalRequest: data.additionalRequest,
-                proposalStatus: 4,
+                processStatus: 4,
             })
         );
         setOpen(false);
@@ -72,7 +72,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
             editProcessAction({
                 ...processObj,
                 ...data,
-                proposalStatus: 5,
+                processStatus: 5,
             })
         );
         setOpen(false);
@@ -83,7 +83,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
             editProcessAction({
                 ...processObj,
                 leaderId: leaderId,
-                proposalStatus: 2,
+                processStatus: 2,
             })
         );
         setOpen(false);

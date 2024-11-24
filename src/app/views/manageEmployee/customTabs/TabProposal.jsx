@@ -85,7 +85,8 @@ const TabPropose = () => {
         if (proposalObj?.id) {
             dispatch(editProposalAction({
                 ...proposalObj,
-                proposalDate: moment().format("YYYY-MM-DD")
+                proposalDate: moment().format("YYYY-MM-DD"),
+                proposalStatus: 2
             }))
         } else {
             dispatch(addProposalAction(proposalObj, employee?.id))

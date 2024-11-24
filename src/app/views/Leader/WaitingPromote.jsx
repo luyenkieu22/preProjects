@@ -55,6 +55,7 @@ const WaitingPromote = () => {
     const handleApplicationForm = (data) => {
         dispatch(getEmployeesAction(data?.employeeId))
         setOpenDialogApplication(true);
+        setItem(data);
     };
 
     const handleViewEmployee = async (data) => {
