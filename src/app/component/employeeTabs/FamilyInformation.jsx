@@ -73,7 +73,8 @@ const FamilyInformation = () => {
         } else {
             dispatch(addFamilyAction(familyObject, employee?.id))
         }
-        handleCancel()
+        handleCancel();
+        ValidatorForm.removeValidationRule("citizenIdentificationNumberValidator");
     }
 
     useEffect(() => {
