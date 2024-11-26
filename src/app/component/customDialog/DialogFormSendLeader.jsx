@@ -61,6 +61,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                         <Grid item xs={6}>
                             <SelectValidator
                                 size="small"
+                                fullWidth
                                 label={
                                     <span>
                                         <span style={{ color: "red" }}> * </span>
@@ -85,6 +86,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                         <Grid item xs={6}>
                             <SelectValidator
                                 size="small"
+                                fullWidth
                                 label={
                                     <span>
                                         <span style={{ color: "red" }}> * </span>

@@ -48,7 +48,6 @@ const TabSalaryIncrease = () => {
         page: 0,
         rowsPerPage: 5,
     });
-    console.log(oldSalaryIncrease !== null ? oldSalaryIncrease : 0);
 
     const [ConfirmDialog, confirm] = useConfirm(
         "Xác nhận xóa",
@@ -289,7 +288,7 @@ const TabSalaryIncrease = () => {
                         label={
                             <span style={{ color: "black" }}>
                                 <span style={{ color: "red" }}> * </span>
-                                Lương cũ
+                                Lương cũ (VNĐ)
                             </span>
                         }
                         variant="outlined"
@@ -312,7 +311,7 @@ const TabSalaryIncrease = () => {
                         label={
                             <span style={{ color: "black" }}>
                                 <span style={{ color: "red" }}> * </span>
-                                Lương mới
+                                Lương mới (VNĐ)
                             </span>
                         }
                         variant="outlined"
@@ -341,6 +340,9 @@ const TabSalaryIncrease = () => {
                         name="reason"
                         value={salaryObj?.reason ? salaryObj?.reason.toLocaleString() : ""}
                         onChange={handleChangeValue}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">vnđ</InputAdornment>,
+                        }}
                         validators={["required"]}
                         errorMessages={["Lý do không được để trống!"]}
                     />

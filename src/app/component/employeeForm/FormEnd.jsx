@@ -21,6 +21,7 @@ import DialogAdditionalRequest from "../customDialog/DialogAdditionalRequest";
 import DialogReject from "../customDialog/DialogReject";
 import { useDispatch, useSelector } from "react-redux";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
+import DialogFormSendLeader from "../customDialog/DialogFormSendLeader";
 
 const useStyles = makeStyles({
     titleDialog: {
@@ -50,6 +51,7 @@ const FormEnd = ({
     const [dialogApproval, setDialogApproval] = useState(false);
     const [dialogAdditionalRequest, setDialogAdditionalRequest] = useState(false);
     const [dialogReject, setDialogReject] = useState(false);
+    const [dialogSendLeader, setDialogSendLeader] = useState(false);
     const dispatch = useDispatch();
     const dateCustom = moment(endDate).format("DD/MM/YYYY").split("/");
 
@@ -233,6 +235,15 @@ const FormEnd = ({
                             handleReject={handleReject}
                         />
                     )}
+                    {dialogSendLeader && (
+                        <DialogFormSendLeader
+                            open={dialogSendLeader}
+                            setOpen={setDialogSendLeader}
+                            data={employee}
+
+                            handleSendLeader={handleSendLeader}
+                        />
+                    )}
                 </Box>
             </DialogContent>
             <DialogActions>
@@ -274,7 +285,7 @@ const FormEnd = ({
                             variant="contained"
                             className="mr-12"
                             color="primary"
-                            onClick={handleSendLeader}
+                            onClick={() => setDialogSendLeader(true)}
                         >
                             Trình lãnh đạo
                         </Button>

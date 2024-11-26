@@ -55,6 +55,7 @@ const FamilyInformation = () => {
             email: "",
             phoneNumber: ""
         })
+        ValidatorForm.removeValidationRule("citizenIdentificationNumberValidator")
     }
 
     const handleClickEdit = (data) => {

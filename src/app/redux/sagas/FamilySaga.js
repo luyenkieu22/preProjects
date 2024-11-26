@@ -27,7 +27,7 @@ function* addFamilySaga(action) {
     const response = yield call(addFamily, data, employeeId);
     if (response?.code === 200) {
         yield put(addFamilyReducer(response?.data));
-        toast.success("Thêm người thân " + response?.message);
+        toast.success("Thêm người thân thành công");
     } else {
         toast.error("Đã có lỗi xảy ra khi thực hiện yêu cầu!");
     }
@@ -37,7 +37,7 @@ function* editFamilySaga(action) {
     const response = yield call(editFamily, action.payload);
     if (response?.code === 200) {
         yield put(editFamilyReducer(response?.data));
-        toast.success("Sửa người thân " + response?.message);
+        toast.success("Sửa người thân thành công");
     } else {
         toast.error("Đã có lỗi xảy ra khi thực hiện yêu cầu!");
     }
@@ -47,7 +47,7 @@ function* deleteFamilySaga(action) {
     const response = yield call(deleteFamily, action.payload);
     if (response?.code === 200) {
         yield put(deleteFamilyReducer(action.payload));
-        toast.success("Xóa người thân " + response?.message);
+        toast.success("Xóa người thân thành công");
     } else {
         toast.error("Đã có lỗi xảy ra khi thực hiện yêu cầu!");
     }
