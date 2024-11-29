@@ -20,7 +20,6 @@ import {
 } from "app/const/statusEmployee";
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "./DialogApprovalWaiting";
-import FormEnd from "app/component/employeeForm/FormEnd";
 import "../../../styles/views/_style.scss";
 
 const Waiting = () => {

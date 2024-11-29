@@ -38,6 +38,10 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
         setOpen(false);
     };
 
+    const handleSubmitForm = () => {
+        setOpen(false);
+    };
+
     return (
         <Dialog open={open} maxWidth={"md"} fullWidth={true}>
             <DialogTitle>
@@ -55,7 +59,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                     </IconButton>
                 </Box>
             </DialogTitle>
-            <ValidatorForm onSubmit={handleSubmit}>
+            <ValidatorForm onSubmit={handleSubmitForm}>
                 <DialogContent>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
@@ -120,7 +124,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                     >
                         Hủy
                     </Button>
-                    <Button variant="contained" color="primary" type="submit">
+                    <Button variant="contained" color="primary" type="submit" onClick={handleSubmit}>
                         Lưu
                     </Button>
                 </DialogActions>

@@ -283,11 +283,11 @@ const ManageEmployeesDialog = ({
                     <Tab label="Thăng chức" value={3} />
                 </Tabs>
                 {statusTabs === 1 ? (
-                    <TabSalaryIncrease />
+                    <TabSalaryIncrease setOpenDialog={setOpen} />
                 ) : statusTabs === 2 ? (
-                    <TabPropose />
+                    <TabPropose setOpenDialog={setOpen} />
                 ) : (
-                    statusTabs === 3 && <TabProcess />
+                    statusTabs === 3 && <TabProcess setOpenDialog={setOpen} />
                 )}
                 {showCV && (
                     <DialogApprovalWaiting

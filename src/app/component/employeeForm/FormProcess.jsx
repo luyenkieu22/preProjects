@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     },
 });
 
-const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
+const FormProcess = ({ open, setOpen, employeeData, processObj, leader, save, setOpenDialog }) => {
     const classes = useStyles();
     const [dialogApproval, setDialogApproval] = useState(false);
     const [dialogAdditionalRequest, setDialogAdditionalRequest] = useState(false);
@@ -87,6 +87,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
             })
         );
         setOpen(false);
+        setOpenDialog(false);
     };
 
     return (
@@ -112,9 +113,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
                 <Box className="dialog-body">
                     <Grid container spacing={3} item xs={12} className="container-form">
                         <Grid item xs={4}>
-                            <Typography className="flex-center">
-                                CÔNG TY OCEANTECH
-                            </Typography>
+                            <Typography className="flex-center">CÔNG TY OCEANTECH</Typography>
                             <Typography className="flex-center font-bold">
                                 SỐ {employeeData?.id}/ QĐ - TC
                             </Typography>
@@ -270,7 +269,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
                     >
                         Hủy
                     </Button>
-                    {leader ? (
+                    {leader && (
                         <>
                             <Button
                                 variant="contained"
@@ -294,12 +293,13 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader }) => {
                                 Từ chối
                             </Button>
                         </>
-                    ) : (
+                    )}
+                    {save && (
                         <Button
                             variant="contained"
                             className="mr-12"
                             color="primary"
-                            onClick={() => setDialogApproval(true)}
+                            onClick={() => setDialogLeader(true)}
                         >
                             Trình lãnh đạo
                         </Button>

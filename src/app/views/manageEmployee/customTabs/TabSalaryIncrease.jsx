@@ -23,7 +23,7 @@ import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useDispatch, useSelector } from "react-redux";
 import { getOldSalaryIncrease } from "utils";
 
-const TabSalaryIncrease = () => {
+const TabSalaryIncrease = ({ setOpenDialog }) => {
     const { employee } = useSelector(state => state.employees)
     const { salaryIncrease, totalElements, isLoading } = useSelector(
         (state) => state.salaryIncrease
@@ -42,6 +42,7 @@ const TabSalaryIncrease = () => {
     const [salaryObj, setSalaryObj] = useState(initialValue);
     const oldSalaryIncrease = getOldSalaryIncrease(salaryIncrease);
     const [dialogViewForm, setDialogForm] = useState(false);
+    const [dialogSave, setDialogSave] = useState(false);
     const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false);
     const [message, setMessage] = useState({ title: "", content: "" });
     const [pagnition, setPagnition] = useState({
@@ -108,14 +109,13 @@ const TabSalaryIncrease = () => {
         });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
         if (salaryObj?.id) {
             dispatch(
                 editSalaryIncreaseAction({
                     ...salaryObj,
                     startDate: moment().format("YYYY-MM-DD"),
                     oldSalary: oldSalaryIncrease !== null ? oldSalaryIncrease : 0,
-                    salaryIncreaseStatus: 2
                 })
             );
         } else {
@@ -126,7 +126,7 @@ const TabSalaryIncrease = () => {
                 )
             );
         }
-        setSalaryObj(initialValue);
+        setDialogSave(true)
     };
 
     const columns = [
@@ -321,6 +321,9 @@ const TabSalaryIncrease = () => {
                             salaryObj?.newSalary ? salaryObj?.newSalary.toLocaleString() : ""
                         }
                         onChange={handleChangeValue}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">vnđ</InputAdornment>,
+                        }}
                         validators={["required"]}
                         errorMessages={["Trường này không được để trống!"]}
                     />
@@ -340,9 +343,6 @@ const TabSalaryIncrease = () => {
                         name="reason"
                         value={salaryObj?.reason ? salaryObj?.reason.toLocaleString() : ""}
                         onChange={handleChangeValue}
-                        InputProps={{
-                            endAdornment: <InputAdornment position="end">vnđ</InputAdornment>,
-                        }}
                         validators={["required"]}
                         errorMessages={["Lý do không được để trống!"]}
                     />
@@ -398,6 +398,16 @@ const TabSalaryIncrease = () => {
                     setOpen={setDialogForm}
                     employeeData={employee}
                     salaryObj={salaryObj}
+                />
+            )}
+            {dialogSave && (
+                <FormSalaryIncrease
+                    open={dialogSave}
+                    setOpen={setDialogSave}
+                    setOpenDialog={setOpenDialog}
+                    employeeData={employee}
+                    salaryObj={salaryObj}
+                    save={true}
                 />
             )}
             {dialogNotifyRequest && (

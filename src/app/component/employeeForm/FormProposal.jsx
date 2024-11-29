@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     },
 });
 
-const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader }) => {
+const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, setOpenDialog }) => {
     const classes = useStyles();
     const [dialogApproval, setDialogApproval] = useState(false);
     const [dialogAdditionalRequest, setDialogAdditionalRequest] = useState(false);
@@ -79,6 +79,7 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader }) => {
             proposalStatus: 2,
         }))
         setOpen(false)
+        setOpenDialog(false)
     };
 
     return (
@@ -236,7 +237,7 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader }) => {
                     >
                         Hủy
                     </Button>
-                    {leader ? (
+                    {leader && (
                         <>
                             <Button variant="contained" color="primary" onClick={() => setDialogApproval(true)}>
                                 Phê duyệt
@@ -248,12 +249,13 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader }) => {
                                 Từ chối
                             </Button>
                         </>
-                    ) : (
+                    )}
+                    {save && (
                         <Button
                             variant="contained"
                             className="mr-12"
                             color="primary"
-                            onClick={() => setDialogApproval(true)}
+                            onClick={() => setDialogLeader(true)}
                         >
                             Trình lãnh đạo
                         </Button>

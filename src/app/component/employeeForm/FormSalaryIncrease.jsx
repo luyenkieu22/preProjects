@@ -33,9 +33,11 @@ const useStyles = makeStyles({
 const FormSalaryIncrease = ({
     open,
     setOpen,
+    setOpenDialog,
     employeeData,
     salaryObj,
-    leader
+    leader,
+    save
 }) => {
     const classes = useStyles();
     const [dialogApproval, setDialogApproval] = useState(false);
@@ -83,6 +85,7 @@ const FormSalaryIncrease = ({
             salaryIncreaseStatus: 2,
         }))
         setOpen(false)
+        setOpenDialog(false)
     };
 
     return (
@@ -225,7 +228,7 @@ const FormSalaryIncrease = ({
                     >
                         Hủy
                     </Button>
-                    {leader ? (
+                    {leader && (
                         <>
                             <Button variant="contained" color="primary" onClick={() => setDialogApproval(true)}>
                                 Phê duyệt
@@ -237,12 +240,13 @@ const FormSalaryIncrease = ({
                                 Từ chối
                             </Button>
                         </>
-                    ) : (
+                    )}
+                    {save && (
                         <Button
                             variant="contained"
                             className="mr-12"
                             color="primary"
-                            onClick={() => setDialogApproval(true)}
+                            onClick={() => setDialogLeader(true)}
                         >
                             Trình lãnh đạo
                         </Button>

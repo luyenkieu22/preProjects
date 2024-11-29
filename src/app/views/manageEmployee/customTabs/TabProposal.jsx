@@ -5,29 +5,45 @@ import { Visibility } from "@material-ui/icons";
 import DialogNotifyRequest from "app/component/customDialog/DialogNotifyRequest";
 import CustomTable from "app/component/CustomTable";
 import { useConfirm } from "app/component/useConfirm";
-import { STATUS, STATUS_EMPLOYEE, TYPE_PROPOSAL } from "app/const/statusEmployee";
+import {
+    STATUS,
+    STATUS_EMPLOYEE,
+    TYPE_PROPOSAL,
+} from "app/const/statusEmployee";
 import moment from "moment";
-import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { addProposalAction, deleteProposalAction, editProposalAction, getProposalByEmployeeAction } from "app/redux/actions/proposalAction";
+import {
+    SelectValidator,
+    TextValidator,
+    ValidatorForm,
+} from "react-material-ui-form-validator";
+import {
+    addProposalAction,
+    deleteProposalAction,
+    editProposalAction,
+    getProposalByEmployeeAction,
+} from "app/redux/actions/proposalAction";
 import FormProposal from "app/component/employeeForm/FormProposal";
 
-const TabPropose = () => {
-    const { employee } = useSelector(state => state.employees)
-    const { proposal, totalElements, isLoading } = useSelector(state => state.proposal)
-    const dispatch = useDispatch()
+const TabPropose = ({ setOpenDialog }) => {
+    const { employee } = useSelector((state) => state.employees);
+    const { proposal, totalElements, isLoading } = useSelector(
+        (state) => state.proposal
+    );
+    const dispatch = useDispatch();
     const initialValue = {
         proposalDate: moment().format("YYYY-MM-DD"),
         content: "",
         note: "",
         type: "",
         detailedDescription: "",
-        leaderId: employee?.leaderId || ""
-    }
-    const [dataPage, setDataPage] = useState([])
-    const [proposalObj, setProposalObj] = useState(initialValue)
-    const [dialogViewCV, setDialogViewCV] = useState(false)
-    const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false)
-    const [message, setMessage] = useState({ title: "", content: "" })
+        leaderId: employee?.leaderId || "",
+    };
+    const [dataPage, setDataPage] = useState([]);
+    const [proposalObj, setProposalObj] = useState(initialValue);
+    const [dialogViewCV, setDialogViewCV] = useState(false);
+    const [dialogSave, setDialogSave] = useState(false);
+    const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false);
+    const [message, setMessage] = useState({ title: "", content: "" });
     const [pagnition, setPagnition] = useState({
         page: 0,
         rowsPerPage: 5,
@@ -35,7 +51,7 @@ const TabPropose = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Xác nhận xóa",
         "Bạn có muốn xóa thông tin này không!"
-    )
+    );
 
     const updateDataPage = () => {
         const startOfPage = pagnition.page * pagnition.rowsPerPage;
@@ -56,9 +72,9 @@ const TabPropose = () => {
         const { name, value } = e.target;
         setProposalObj({
             ...proposalObj,
-            [name]: value
-        })
-    }
+            [name]: value,
+        });
+    };
 
     const handleDeleteEmployee = async (id) => {
         const ok = await confirm();
@@ -73,26 +89,29 @@ const TabPropose = () => {
     };
 
     const handleNotifyEmployee = (data) => {
-        const additionalRequest = data?.salaryIncreaseStatus === 5
+        const additionalRequest = data?.salaryIncreaseStatus === 5;
         setDialogNotifyRequest(true);
         setMessage({
             title: additionalRequest ? "Nội dung yêu cầu bổ sung" : "Lý do từ chối",
-            content: additionalRequest ? data?.reasonForRefusal : data?.additionalRequest
-        })
+            content: additionalRequest
+                ? data?.reasonForRefusal
+                : data?.additionalRequest,
+        });
     };
 
     const handleSubmit = () => {
         if (proposalObj?.id) {
-            dispatch(editProposalAction({
-                ...proposalObj,
-                proposalDate: moment().format("YYYY-MM-DD"),
-                proposalStatus: 2
-            }))
+            dispatch(
+                editProposalAction({
+                    ...proposalObj,
+                    proposalDate: moment().format("YYYY-MM-DD"),
+                })
+            );
         } else {
-            dispatch(addProposalAction(proposalObj, employee?.id))
+            dispatch(addProposalAction(proposalObj, employee?.id));
         }
-        setProposalObj(initialValue)
-    }
+        setDialogSave(true);
+    };
 
     const columns = [
         {
@@ -103,27 +122,40 @@ const TabPropose = () => {
             render: (rowData) => {
                 return (
                     <div className="">
-                        {STATUS_EMPLOYEE.EDIT.includes(rowData.proposalStatus) &&
-                            <IconButton size="small" onClick={() => setProposalObj({ ...rowData, proposalDate: moment(rowData?.proposalDate).format("YYYY-MM-DD") })}>
+                        {STATUS_EMPLOYEE.EDIT.includes(rowData.proposalStatus) && (
+                            <IconButton
+                                size="small"
+                                onClick={() =>
+                                    setProposalObj({
+                                        ...rowData,
+                                        proposalDate: moment(rowData?.proposalDate).format(
+                                            "YYYY-MM-DD"
+                                        ),
+                                    })
+                                }
+                            >
                                 <Icon fontSize="small" color="primary">
                                     edit
                                 </Icon>
                             </IconButton>
-                        }
-                        {rowData?.proposalStatus === 1 &&
-                            <IconButton size="small" onClick={() => handleDeleteEmployee(rowData.id)}>
+                        )}
+                        {rowData?.proposalStatus === 1 && (
+                            <IconButton
+                                size="small"
+                                onClick={() => handleDeleteEmployee(rowData.id)}
+                            >
                                 <Icon fontSize="small" color="error">
                                     delete
                                 </Icon>
                             </IconButton>
-                        }
+                        )}
                         <IconButton
                             size="small"
                             onClick={() => handleViewEmployee(rowData)}
                         >
                             <Visibility fontSize="small" color="secondary"></Visibility>
                         </IconButton>
-                        {STATUS_EMPLOYEE.NOTIFY.includes(rowData.proposalStatus) &&
+                        {STATUS_EMPLOYEE.NOTIFY.includes(rowData.proposalStatus) && (
                             <IconButton
                                 size="small"
                                 onClick={() => handleNotifyEmployee(rowData)}
@@ -132,8 +164,7 @@ const TabPropose = () => {
                                     notifications
                                 </Icon>
                             </IconButton>
-                        }
-
+                        )}
                     </div>
                 );
             },
@@ -160,9 +191,7 @@ const TabPropose = () => {
             align: "left",
             minWidth: "200px",
             maxWidth: "220px",
-            render: (data) => (
-                <span>{`${TYPE_PROPOSAL[data?.type - 1].name}`}</span>
-            ),
+            render: (data) => <span>{`${TYPE_PROPOSAL[data?.type - 1].name}`}</span>,
         },
         {
             title: "Nội dung",
@@ -188,9 +217,7 @@ const TabPropose = () => {
             field: "proposalStatus",
             align: "left",
             minWidth: "120px",
-            render: (data) => (
-                <span>{`${STATUS[data?.proposalStatus].name}`}</span>
-            ),
+            render: (data) => <span>{`${STATUS[data?.proposalStatus].name}`}</span>,
         },
     ];
 
@@ -229,7 +256,7 @@ const TabPropose = () => {
                             shrink: true,
                         }}
                         inputProps={{
-                            readOnly: true
+                            readOnly: true,
                         }}
                         validators={["required"]}
                         errorMessages={["Ngày đề xuất không được để trống"]}
@@ -259,7 +286,7 @@ const TabPropose = () => {
                             </MenuItem>
                         ))}
                     </SelectValidator>
-                </Grid >
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
                     <TextValidator
                         className="w-100 stylePlaceholder mt-2"
@@ -278,7 +305,7 @@ const TabPropose = () => {
                         validators={["required"]}
                         errorMessages={["Trường này không được để trống!"]}
                     />
-                </Grid >
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
                     <TextValidator
                         className="w-100 stylePlaceholder mt-2"
@@ -297,7 +324,7 @@ const TabPropose = () => {
                         validators={["required"]}
                         errorMessages={["Mô tả chi tiết không được để trống!"]}
                     />
-                </Grid >
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12}>
                     <TextValidator
                         className="w-100 stylePlaceholder"
@@ -316,31 +343,60 @@ const TabPropose = () => {
                         validators={["required"]}
                         errorMessages={["Trường này không được để trống!"]}
                     />
-                </Grid >
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12} spacing={2}>
-                    <Button style={{ marginRight: "6px" }} variant="contained" color="secondary" onClick={() => setProposalObj(initialValue)}>
+                    <Button
+                        style={{ marginRight: "6px" }}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setProposalObj(initialValue)}
+                    >
                         Hủy
                     </Button>
-                    <Button style={{ marginRight: "6px" }} variant="contained" color="primary" type="submit">
+                    <Button
+                        style={{ marginRight: "6px" }}
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                    >
                         Lưu
                     </Button>
                 </Grid>
-            </Grid >
+            </Grid>
             <CustomTable
-                data={
-                    dataPage
-                        ? dataPage.map((proposal) => ({ ...proposal }))
-                        : []
-                }
+                data={dataPage ? dataPage.map((proposal) => ({ ...proposal })) : []}
                 columns={columns}
                 setPagnition={setPagnition}
                 pagnition={pagnition}
                 totalElements={totalElements}
             />
-            {dialogViewCV && <FormProposal open={dialogViewCV} setOpen={setDialogViewCV} employeeData={employee} proposalObj={proposalObj} />}
-            {dialogNotifyRequest && <DialogNotifyRequest open={dialogNotifyRequest} setOpen={setDialogNotifyRequest} message={message} />}
+            {dialogViewCV && (
+                <FormProposal
+                    open={dialogViewCV}
+                    setOpen={setDialogViewCV}
+                    employeeData={employee}
+                    proposalObj={proposalObj}
+                />
+            )}
+            {dialogSave && (
+                <FormProposal
+                    open={dialogSave}
+                    setOpen={setDialogViewCV}
+                    setOpenDialog={setOpenDialog}
+                    employeeData={employee}
+                    proposalObj={proposalObj}
+                    save={true}
+                />
+            )}
+            {dialogNotifyRequest && (
+                <DialogNotifyRequest
+                    open={dialogNotifyRequest}
+                    setOpen={setDialogNotifyRequest}
+                    message={message}
+                />
+            )}
             <ConfirmDialog />
-        </ValidatorForm >
+        </ValidatorForm>
     );
 };
 

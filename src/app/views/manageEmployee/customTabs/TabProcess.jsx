@@ -7,26 +7,38 @@ import CustomTable from "app/component/CustomTable";
 import { useConfirm } from "app/component/useConfirm";
 import { POSITION, STATUS, STATUS_EMPLOYEE } from "app/const/statusEmployee";
 import moment from "moment";
-import { SelectValidator, TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { addProcessAction, deleteProcessAction, editProcessAction, getProcessByEmployeeIdAction } from "app/redux/actions/processAction";
+import {
+    SelectValidator,
+    TextValidator,
+    ValidatorForm,
+} from "react-material-ui-form-validator";
+import {
+    addProcessAction,
+    deleteProcessAction,
+    editProcessAction,
+    getProcessByEmployeeIdAction,
+} from "app/redux/actions/processAction";
 import FormProcess from "app/component/employeeForm/FormProcess";
 
-const TabProcess = () => {
-    const { employee } = useSelector(state => state.employees)
-    const { process, totalElements, isLoading } = useSelector(state => state.process)
-    const dispatch = useDispatch()
+const TabProcess = ({ setOpenDialog }) => {
+    const { employee } = useSelector((state) => state.employees);
+    const { process, totalElements, isLoading } = useSelector(
+        (state) => state.process
+    );
+    const dispatch = useDispatch();
     const initialValue = {
         promotionDay: moment().format("YYYY-MM-DD"),
         newPosition: "",
         note: "",
         currentPosition: employee?.currentPosition || "",
-        leaderId: employee?.leaderId || ""
-    }
-    const [dataPage, setDataPage] = useState([])
-    const [processObj, setProcessObj] = useState(initialValue)
-    const [dialogViewCV, setDialogViewCV] = useState(false)
-    const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false)
-    const [message, setMessage] = useState({ title: "", content: "" })
+        leaderId: employee?.leaderId || "",
+    };
+    const [dataPage, setDataPage] = useState([]);
+    const [processObj, setProcessObj] = useState(initialValue);
+    const [dialogViewCV, setDialogViewCV] = useState(false);
+    const [dialogSave, setDialogSave] = useState(false);
+    const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false);
+    const [message, setMessage] = useState({ title: "", content: "" });
     const [pagnition, setPagnition] = useState({
         page: 0,
         rowsPerPage: 5,
@@ -34,7 +46,7 @@ const TabProcess = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Xác nhận xóa",
         "Bạn có muốn xóa thông tin này không!"
-    )
+    );
 
     const updateDataPage = () => {
         const startOfPage = pagnition.page * pagnition.rowsPerPage;
@@ -55,9 +67,9 @@ const TabProcess = () => {
         const { name, value } = e.target;
         setProcessObj({
             ...processObj,
-            [name]: value
-        })
-    }
+            [name]: value,
+        });
+    };
 
     const handleDelete = async (id) => {
         const ok = await confirm();
@@ -72,26 +84,29 @@ const TabProcess = () => {
     };
 
     const handleNotifyEmployee = (data) => {
-        const additionalRequest = data?.salaryIncreaseStatus === 5
+        const additionalRequest = data?.salaryIncreaseStatus === 5;
         setDialogNotifyRequest(true);
         setMessage({
             title: additionalRequest ? "Nội dung yêu cầu bổ sung" : "Lý do từ chối",
-            content: additionalRequest ? data?.reasonForRefusal : data?.additionalRequest
-        })
+            content: additionalRequest
+                ? data?.reasonForRefusal
+                : data?.additionalRequest,
+        });
     };
 
     const handleSubmit = () => {
         if (processObj?.id) {
-            dispatch(editProcessAction({
-                ...processObj,
-                processStatus: 2,
-                promotionDay: moment().format("YYYY-MM-DD")
-            }))
+            dispatch(
+                editProcessAction({
+                    ...processObj,
+                    promotionDay: moment().format("YYYY-MM-DD"),
+                })
+            );
         } else {
-            dispatch(addProcessAction(processObj, employee?.id))
+            dispatch(addProcessAction(processObj, employee?.id));
         }
-        setProcessObj(initialValue)
-    }
+        setDialogSave(true);
+    };
 
     const columns = [
         {
@@ -102,27 +117,37 @@ const TabProcess = () => {
             render: (rowData) => {
                 return (
                     <div className="">
-                        {STATUS_EMPLOYEE.EDIT.includes(rowData.processStatus) &&
-                            <IconButton size="small" onClick={() => setProcessObj({ ...rowData, promotionDay: moment(rowData?.promotionDay).format("YYYY-MM-DD") })}>
+                        {STATUS_EMPLOYEE.EDIT.includes(rowData.processStatus) && (
+                            <IconButton
+                                size="small"
+                                onClick={() =>
+                                    setProcessObj({
+                                        ...rowData,
+                                        promotionDay: moment(rowData?.promotionDay).format(
+                                            "YYYY-MM-DD"
+                                        ),
+                                    })
+                                }
+                            >
                                 <Icon fontSize="small" color="primary">
                                     edit
                                 </Icon>
                             </IconButton>
-                        }
-                        {rowData?.processStatus === 1 &&
+                        )}
+                        {rowData?.processStatus === 1 && (
                             <IconButton size="small" onClick={() => handleDelete(rowData.id)}>
                                 <Icon fontSize="small" color="error">
                                     delete
                                 </Icon>
                             </IconButton>
-                        }
+                        )}
                         <IconButton
                             size="small"
                             onClick={() => handleViewEmployee(rowData)}
                         >
                             <Visibility fontSize="small" color="secondary"></Visibility>
                         </IconButton>
-                        {STATUS_EMPLOYEE.NOTIFY.includes(rowData.processStatus) &&
+                        {STATUS_EMPLOYEE.NOTIFY.includes(rowData.processStatus) && (
                             <IconButton
                                 size="small"
                                 onClick={() => handleNotifyEmployee(rowData)}
@@ -131,8 +156,7 @@ const TabProcess = () => {
                                     notifications
                                 </Icon>
                             </IconButton>
-                        }
-
+                        )}
                     </div>
                 );
             },
@@ -183,9 +207,7 @@ const TabProcess = () => {
             field: "processStatus",
             align: "left",
             minWidth: "120px",
-            render: (data) => (
-                <span>{`${STATUS[data?.processStatus].name}`}</span>
-            ),
+            render: (data) => <span>{`${STATUS[data?.processStatus].name}`}</span>,
         },
     ];
 
@@ -224,7 +246,7 @@ const TabProcess = () => {
                             shrink: true,
                         }}
                         inputProps={{
-                            readOnly: true
+                            readOnly: true,
                         }}
                         validators={["required"]}
                         errorMessages={["Ngày thăng chức không được để trống"]}
@@ -242,7 +264,10 @@ const TabProcess = () => {
                         type="text"
                         name="currentPosition"
                         disabled
-                        value={processObj?.currentPosition && POSITION[processObj?.currentPosition].value}
+                        value={
+                            processObj?.currentPosition &&
+                            POSITION[processObj?.currentPosition].value
+                        }
                         fullWidth
                         variant="outlined"
                         size="small"
@@ -271,15 +296,13 @@ const TabProcess = () => {
                         validators={["required"]}
                         errorMessages={["Trường này không được để trống!"]}
                     >
-                        {
-                            POSITION.map((item) => (
-                                <MenuItem value={item.id} key={item.id}>
-                                    {item.value}
-                                </MenuItem>
-                            ))
-                        }
-                    </SelectValidator >
-                </Grid >
+                        {POSITION.map((item) => (
+                            <MenuItem value={item.id} key={item.id}>
+                                {item.value}
+                            </MenuItem>
+                        ))}
+                    </SelectValidator>
+                </Grid>
                 <Grid item lg={8} md={8} sm={12} xs={12}>
                     <TextValidator
                         className="w-100 stylePlaceholder mt-2"
@@ -298,31 +321,60 @@ const TabProcess = () => {
                         validators={["required"]}
                         errorMessages={["Ghi chú không được để trống!"]}
                     />
-                </Grid >
+                </Grid>
                 <Grid item lg={4} md={4} sm={12} xs={12} spacing={2}>
-                    <Button style={{ marginRight: "6px" }} variant="contained" color="secondary" onClick={() => setProcessObj(initialValue)}>
+                    <Button
+                        style={{ marginRight: "6px" }}
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setProcessObj(initialValue)}
+                    >
                         Hủy
                     </Button>
-                    <Button style={{ marginRight: "6px" }} variant="contained" color="primary" type="submit">
+                    <Button
+                        style={{ marginRight: "6px" }}
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                    >
                         Lưu
                     </Button>
                 </Grid>
-            </Grid >
+            </Grid>
             <CustomTable
-                data={
-                    dataPage
-                        ? dataPage.map((proposal) => ({ ...proposal }))
-                        : []
-                }
+                data={dataPage ? dataPage.map((proposal) => ({ ...proposal })) : []}
                 columns={columns}
                 setPagnition={setPagnition}
                 pagnition={pagnition}
                 totalElements={totalElements}
             />
-            {dialogViewCV && <FormProcess open={dialogViewCV} setOpen={setDialogViewCV} employeeData={employee} processObj={processObj} />}
-            {dialogNotifyRequest && <DialogNotifyRequest open={dialogNotifyRequest} setOpen={setDialogNotifyRequest} message={message} />}
+            {dialogViewCV && (
+                <FormProcess
+                    open={dialogViewCV}
+                    setOpen={setDialogViewCV}
+                    employeeData={employee}
+                    processObj={processObj}
+                />
+            )}
+            {dialogSave && (
+                <FormProcess
+                    open={dialogSave}
+                    setOpen={setDialogSave}
+                    setOpenDialog={setOpenDialog}
+                    employeeData={employee}
+                    processObj={processObj}
+                    save={true}
+                />
+            )}
+            {dialogNotifyRequest && (
+                <DialogNotifyRequest
+                    open={dialogNotifyRequest}
+                    setOpen={setDialogNotifyRequest}
+                    message={message}
+                />
+            )}
             <ConfirmDialog />
-        </ValidatorForm >
+        </ValidatorForm>
     );
 };
 
