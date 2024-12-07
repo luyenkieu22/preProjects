@@ -27,11 +27,12 @@ const useStyles = makeStyles({
 
 const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
     const classes = useStyles();
-    const [leaderId, setLeaderId] = useState(data?.leaderId);
+    const [leaderId, setLeaderId] = useState(data?.leaderId ? data?.leaderId : null);
 
     const handleCloseDialog = () => {
         setOpen(false);
     };
+
 
     const handleSubmit = () => {
         handleSendLeader(leaderId)
@@ -67,7 +68,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Tên lãnh đạo
                                     </span>
@@ -92,7 +93,7 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Chức vụ
                                     </span>
@@ -100,10 +101,8 @@ const DialogFormSendLeader = ({ open, setOpen, data, handleSendLeader }) => {
                                 variant="outlined"
                                 type="text"
                                 name="leaderPosition"
+                                disabled
                                 value={LEADER.find(item => item.id === leaderId)?.leaderPosition}
-                                inputProps={{
-                                    readOnly: true,
-                                }}
                                 validators={["required"]}
                                 errorMessages={["Chức vụ không được để trống"]}
                             >

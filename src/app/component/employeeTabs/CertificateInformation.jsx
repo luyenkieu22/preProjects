@@ -6,7 +6,8 @@ import CustomTable from '../CustomTable'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCertificateAction, deleteCertificateAction, editCertificateAction, getCertificateByEmployeeAction } from 'app/redux/actions/certificatesAction'
 import { useConfirm } from '../useConfirm'
-import { regexName } from 'app/const/regex'
+import { regexAddress } from 'app/const/regex'
+import "../../../styles/views/_style.scss";
 
 const CertificateInformation = () => {
     const { employee } = useSelector(state => state.employees)
@@ -55,7 +56,8 @@ const CertificateInformation = () => {
     const handleDeleteCertificate = async (id) => {
         const ok = await confirm();
         if (!ok) return;
-        dispatch(deleteCertificateAction(id))
+        dispatch(deleteCertificateAction(id));
+        handleCancel();
     }
 
     const handleSubmit = () => {
@@ -97,6 +99,7 @@ const CertificateInformation = () => {
             align: "left",
             minWidth: "200px",
             maxWidth: "200px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.certificateName}</span>
         },
         {
             title: "Ngày cấp",
@@ -112,14 +115,16 @@ const CertificateInformation = () => {
             title: "Lĩnh vực",
             field: "field",
             align: "center",
-            minWidth: "60px",
-            maxWidth: "100px",
+            minWidth: "80px",
+            maxWidth: "120px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.field}</span>
         },
         {
             title: "Nội dung",
             field: "content",
             align: "left",
             minWidth: "160px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.content}</span>
         }
     ];
 
@@ -144,10 +149,10 @@ const CertificateInformation = () => {
                             type="text"
                             name="certificateName"
                             value={certificatesObject.certificateName}
-                            validators={["required", `matchRegexp:${regexName}`]}
+                            validators={["required", `matchRegexp:${regexAddress}`]}
                             errorMessages={[
                                 "Tên chứng chỉ không được để trống",
-                                "Tên chứng chỉ không chứa ký tự đặc biệt và các chữ số"
+                                "Tên chứng chỉ không chứa ký tự đặc biệt"
                             ]}
                         />
                     </Grid>
@@ -178,6 +183,9 @@ const CertificateInformation = () => {
                             errorMessages={[
                                 "Ngày cấp không được để trống",
                             ]}
+                            inputProps={{
+                                max: moment().format("YYYY-MM-DD"),
+                            }}
                         />
                     </Grid>
                     <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -240,7 +248,7 @@ const CertificateInformation = () => {
                             color="primary"
                             type='submit'
                         >
-                            Lưu
+                            {certificatesObject?.id ? "Cập nhật" : "Thêm"}
                         </Button>
                     </Grid>
                     <Grid item xs={12}>

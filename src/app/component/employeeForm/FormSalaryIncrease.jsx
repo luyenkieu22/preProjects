@@ -212,7 +212,7 @@ const FormSalaryIncrease = ({
                         <DialogFormSendLeader
                             open={dialogLeader}
                             setOpen={setDialogLeader}
-                            data={salaryObj}
+                            data={employeeData}
                             handleSendLeader={handleSendLeader}
                         />
                     )}

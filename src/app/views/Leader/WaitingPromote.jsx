@@ -19,6 +19,7 @@ import { getCertificateByEmployeeAction } from "app/redux/actions/certificatesAc
 import { getFamilyByEmployeeIdAction } from "app/redux/actions/familyAction";
 import { getProcessByLeaderAction } from "app/redux/actions/processAction";
 import FormProcess from "app/component/employeeForm/FormProcess";
+import "../../../styles/views/_style.scss"
 
 const WaitingPromote = () => {
     const [pagnition, setPagnition] = useState({
@@ -95,7 +96,7 @@ const WaitingPromote = () => {
         {
             title: "STT",
             align: "center",
-            maxWidth: "60px",
+            maxWidth: "80px",
             render: (data) =>
                 data.tableData.id + 1 + pagnition.page * pagnition.rowsPerPage,
         },
@@ -103,7 +104,7 @@ const WaitingPromote = () => {
             title: "Ngày thăng chức",
             field: "promotionDate",
             align: "center",
-            minWidth: "160px",
+            minWidth: "120px",
             render: (data) => (
                 <span>{moment(data?.promotionDate).format("DD/MM/YYYY")}</span>
             ),
@@ -111,22 +112,23 @@ const WaitingPromote = () => {
         {
             title: "Vị trí hiện tại",
             field: "currentPosition",
-            align: "center",
+            align: "left",
             minWidth: "160px",
             render: (data) => <span>{data?.currentPosition ? POSITION[data?.currentPosition - 1]?.value : "Vị trí hiện tại trống"}</span>
         },
         {
             title: "Vị trí đề xuất",
             field: "newPosition",
-            align: "center",
+            align: "left",
             minWidth: "160px",
             render: (data) => <span>{data?.newPosition ? POSITION[data?.newPosition - 1]?.value : "Vị trí đề xuất trống"}</span>
         },
         {
             title: "Ghi chú",
             field: "note",
-            align: "center",
-            minWidth: "160px",
+            align: "left",
+            minWidth: "180px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.note}</span>
         }
     ];
 

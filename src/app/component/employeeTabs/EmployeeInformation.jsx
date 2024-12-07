@@ -28,11 +28,11 @@ const EmployeeInformation = ({
     refInformation,
     employee,
     handleChangeValue,
-    setOpen,
     setChangeTab,
 }) => {
     const dispatch = useDispatch();
     const { file } = useSelector((state) => state.employees);
+
 
     useEffect(() => {
         ValidatorForm.addValidationRule(
@@ -76,7 +76,6 @@ const EmployeeInformation = ({
         } else {
             dispatch(addEmployeeAction(employee, file));
         }
-        setOpen(false);
         setChangeTab(true);
     };
 
@@ -95,7 +94,7 @@ const EmployeeInformation = ({
                     lg={4}
                 >
                     <Grid item>
-                        <img className="avatar" alt="Avatar" src={employee.image} />
+                        <img className="avatar" alt="Avatar" src={employee.image ? employee.image : "/assets/images/avatar.jpg"} />
                     </Grid>
                     <Grid item>
                         <input
@@ -211,6 +210,9 @@ const EmployeeInformation = ({
                             size="small"
                             InputLabelProps={{
                                 shrink: true,
+                            }}
+                            inputProps={{
+                                max: moment().format("YYYY-MM-DD")
                             }}
                             validators={["required", "dateOfBirthValidator"]}
                             errorMessages={[

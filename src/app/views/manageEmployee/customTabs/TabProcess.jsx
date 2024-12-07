@@ -19,6 +19,7 @@ import {
     getProcessByEmployeeIdAction,
 } from "app/redux/actions/processAction";
 import FormProcess from "app/component/employeeForm/FormProcess";
+import "../../../../styles/views/_style.scss"
 
 const TabProcess = ({ setOpenDialog }) => {
     const { employee } = useSelector((state) => state.employees);
@@ -31,7 +32,6 @@ const TabProcess = ({ setOpenDialog }) => {
         newPosition: "",
         note: "",
         currentPosition: employee?.currentPosition || "",
-        leaderId: employee?.leaderId || "",
     };
     const [dataPage, setDataPage] = useState([]);
     const [processObj, setProcessObj] = useState(initialValue);
@@ -80,7 +80,6 @@ const TabProcess = ({ setOpenDialog }) => {
 
     const handleViewEmployee = (data) => {
         setDialogViewCV(true);
-        setProcessObj(data);
     };
 
     const handleNotifyEmployee = (data) => {
@@ -134,7 +133,7 @@ const TabProcess = ({ setOpenDialog }) => {
                                 </Icon>
                             </IconButton>
                         )}
-                        {rowData?.processStatus === 1 && (
+                        {rowData?.processStatus === "1" && (
                             <IconButton size="small" onClick={() => handleDelete(rowData.id)}>
                                 <Icon fontSize="small" color="error">
                                     delete
@@ -183,6 +182,7 @@ const TabProcess = ({ setOpenDialog }) => {
             align: "left",
             minWidth: "200px",
             maxWidth: "220px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.note}</span>
         },
         {
             title: "Vị trí hiện tại",
@@ -246,7 +246,7 @@ const TabProcess = ({ setOpenDialog }) => {
                             shrink: true,
                         }}
                         inputProps={{
-                            readOnly: true,
+                            max: moment().format("YYYY-MM-DD"),
                         }}
                         validators={["required"]}
                         errorMessages={["Ngày thăng chức không được để trống"]}

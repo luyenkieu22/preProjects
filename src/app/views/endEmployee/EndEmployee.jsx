@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
     Grid,
+    Icon,
     IconButton,
     Input,
     InputAdornment,
@@ -17,6 +18,7 @@ import { GENDER, STATUS, STATUS_EMPLOYEE, TEAMS } from "app/const/statusEmployee
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "../Leader/DialogApprovalWaiting";
 import "../../../styles/views/_style.scss";
+import DialogSaveEmployee from "app/component/customDialog/DialogSaveEmployee";
 
 const EndEmployee = ({ t }) => {
     const { employees, totalElements, isLoading } = useSelector(
@@ -27,6 +29,7 @@ const EndEmployee = ({ t }) => {
         rowsPerPage: 10,
     });
     const [openDialogShowCV, setOpenDialogShowCV] = useState(false);
+    const [openDialogSave, setOpenDialogSave] = useState(false);
     const [keyword, setKeyword] = useState("");
     const dispatch = useDispatch();
 
@@ -54,6 +57,11 @@ const EndEmployee = ({ t }) => {
         dispatch(setEmployeeAction(data))
     };
 
+    const handleSaveForm = (data) => {
+        setOpenDialogSave(true);
+        dispatch(setEmployeeAction(data))
+    };
+
     const columns = [
         {
             title: "Thao tác",
@@ -62,13 +70,25 @@ const EndEmployee = ({ t }) => {
             maxWidth: "120px",
             render: (rowData) => {
                 return (
-                    <div style={{ display: "flex", justifyContent: "center" }}>
-                        <IconButton
-                            size="small"
-                            onClick={() => handleViewEmployee(rowData)}
-                        >
-                            <Visibility fontSize="small" color="secondary"></Visibility>
-                        </IconButton>
+                    <div style={{ display: "flex", justifyContent: "center", gap: "6px" }}>
+                        {rowData.submitProfileStatus === "7" && (
+                            <IconButton
+                                size="small"
+                                onClick={() => handleSaveForm(rowData)}
+                            >
+                                <Icon fontSize="small" color="primary">
+                                    receipt
+                                </Icon>
+                            </IconButton>
+                        )}
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <IconButton
+                                size="small"
+                                onClick={() => handleViewEmployee(rowData)}
+                            >
+                                <Visibility fontSize="small" color="secondary"></Visibility>
+                            </IconButton>
+                        </div>
                     </div>
                 );
             },
@@ -175,6 +195,13 @@ const EndEmployee = ({ t }) => {
                         <DialogApprovalWaiting
                             open={openDialogShowCV}
                             setOpen={setOpenDialogShowCV}
+                            showEmployeeEnd={true}
+                        />
+                    )}
+                    {openDialogSave && (
+                        <DialogSaveEmployee
+                            open={openDialogSave}
+                            setOpen={setOpenDialogSave}
                         />
                     )}
                     <CustomTable

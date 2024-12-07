@@ -1,3 +1,6 @@
+.font-family {
+  font-family: "Times New Roman", Times, serif !important;
+}
 .upload-drop-box {
   height: 120px;
   width: 100%;
@@ -107,6 +110,7 @@
   font-size: 20px;
   font-weight: bold;
   text-align: center;
+  font-family: "Times New Roman", Times, serif !important;
 }
 
 .text-overflow {
@@ -127,7 +131,6 @@
   position: relative;
   margin-left: 0px !important;
   .MuiInputBase-root {
-    font-family: "Times New Roman", Times, serif !important;
     font-size: 16px !important;
   }
 }
@@ -139,6 +142,21 @@
   left: 0;
   right: 0;
   border-bottom: 1px dashed;
+}
+
+.underline-dash-text textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  line-height: 1.5; /* Khoảng cách giữa các dòng */
+  padding: 8px 0;
+  background: linear-gradient(to bottom, transparent 95%, #ccc 95%);
+  background-size: 100% 2em; /* Chiều cao mỗi dòng */
+  background-repeat: repeat-y;
+}
+
+.underline-dash-text textarea:focus {
+  background: linear-gradient(to bottom, transparent 95%, #007bff 95%);
 }
 
 .end-day {

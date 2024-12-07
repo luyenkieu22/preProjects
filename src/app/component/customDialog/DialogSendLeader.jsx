@@ -12,7 +12,7 @@ import {
     MenuItem,
     Typography,
 } from "@material-ui/core";
-import { LEADER_POSITION } from "app/const/statusEmployee";
+import { LEADER, LEADER_POSITION } from "app/const/statusEmployee";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
 import { getLeaderAction } from "app/redux/actions/leaderAction";
 import moment from "moment";
@@ -29,27 +29,26 @@ const useStyles = makeStyles({
     },
 });
 
-const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
+const DialogSendLeader = ({ open, setOpen, setOpenRequest, setOpenDialogEmployee }) => {
     const { employee } = useSelector(state => state.employees)
-    const { leader } = useSelector(state => state.leader)
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [formData, setFormData] = useState({ ...employee, leaderId: leader?.id });
+    const [formData, setFormData] = useState({ ...employee, submitDay: moment().format("YYYY-MM-DD") });
 
     useEffect(() => {
         dispatch(getLeaderAction())
     }, [dispatch])
 
-
     const handleChangeValue = (e) => {
         const { value, name } = e.target;
         if (name === "leaderId") {
-            const newLeader = leader.find(leader => leader?.id === value);
+            const newLeader = LEADER.find(leader => leader.id === value);
+
             setFormData({
                 ...formData,
                 leaderPosition: newLeader.leaderPosition,
                 leaderName: newLeader.leaderName,
-                leaderId: newLeader.leaderId,
+                leaderId: newLeader.id,
                 [name]: value
             })
         } else {
@@ -59,12 +58,13 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
 
     const handleCloseDialog = () => {
         setOpen(false);
-        setOpenRequest(false);
     };
 
     const handleSubmit = () => {
         dispatch(editEmployeeAction({ ...formData, submitProfileStatus: "2" }));
         setOpen(false);
+        setOpenRequest(false);
+        setOpenDialogEmployee(false);
     };
 
     return (
@@ -92,7 +92,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Ngày nộp
                                     </span>
@@ -102,14 +102,14 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                     formData?.submitDay &&
                                     moment(formData?.submitDay).format("YYYY-MM-DD")
                                 }
-                                onChange={handleChangeValue}
+                                disabled
                                 type="date"
                                 name="submitDay"
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
                                 inputProps={{
-                                    min: moment().format("YYYY-MM-DD")
+                                    max: moment().format("YYYY-MM-DD")
                                 }}
                                 validators={["required"]}
                                 errorMessages={["Ngày nộp không được để trống"]}
@@ -120,7 +120,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Tên lãnh đạo
                                     </span>
@@ -133,7 +133,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 validators={["required"]}
                                 errorMessages={["Tên lãnh đạo không được để trống"]}
                             >
-                                {leader?.map((item) => (
+                                {LEADER.map((item) => (
                                     <MenuItem value={item.id} key={item.id}>
                                         {item?.leaderName}
                                     </MenuItem>
@@ -145,7 +145,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Chức vụ
                                     </span>
@@ -153,6 +153,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 variant="outlined"
                                 type="text"
                                 name="leaderPosition"
+                                disabled
                                 value={formData?.leaderPosition}
                                 onChange={handleChangeValue}
                                 validators={["required"]}
@@ -170,7 +171,7 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Nội dung
                                     </span>

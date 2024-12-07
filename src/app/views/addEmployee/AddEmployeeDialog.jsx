@@ -44,7 +44,7 @@ const AddEmployeeDialog = ({
     setOpen,
 }) => {
     const refInformation = useRef();
-    const { employee } = useSelector(
+    const { employee, file } = useSelector(
         (state) => state.employees
     );
     const classes = useStyles();
@@ -62,7 +62,7 @@ const AddEmployeeDialog = ({
         dateOfBirth: employee?.address || "",
         address: employee?.team || "",
         team: employee?.email || "",
-        image: employee?.image || "/assets/images/avatar.jpg",
+        image: employee?.image ? employee?.image : "/assets/images/avatar.jpg",
         phone: employee?.phone || "",
         citizenIdentificationNumber:
             employee?.citizenIdentificationNumber || "",
@@ -120,7 +120,7 @@ const AddEmployeeDialog = ({
 
     const handleSendLeader = () => {
         setSendLeaderDialog(true);
-        dispatch(editEmployeeAction(employeeObject))
+        dispatch(editEmployeeAction(employeeObject, file))
     };
 
     const handleCloseDialog = () => {
@@ -189,6 +189,7 @@ const AddEmployeeDialog = ({
                         }
                         sendLeader={true}
                         open={sendLeaderDialog}
+                        setOpenDialogEmployee={setOpen}
                         setOpen={setSendLeaderDialog}
                     />
                 )}

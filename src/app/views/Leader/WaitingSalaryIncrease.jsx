@@ -19,6 +19,7 @@ import { getCertificateByEmployeeAction } from "app/redux/actions/certificatesAc
 import { getFamilyByEmployeeIdAction } from "app/redux/actions/familyAction";
 import { getSalaryIncreaseByLeaderAction } from "app/redux/actions/salaryIncreaseAction";
 import FormSalaryIncrease from "app/component/employeeForm/FormSalaryIncrease";
+import "../../../styles/views/_style.scss"
 
 const Waiting = () => {
     const [pagnition, setPagnition] = useState({
@@ -112,28 +113,30 @@ const Waiting = () => {
         {
             title: "Lương cũ",
             field: "oldSalary",
-            align: "center",
+            align: "right",
             minWidth: "120px",
-            render: (data) => <span>{data?.oldSalary}VNĐ</span>,
+            render: (data) => <span>{parseInt(data?.oldSalary).toLocaleString()} VNĐ</span>,
         },
         {
             title: "Lương mới",
             field: "newSalary",
-            align: "center",
+            align: "right",
             minWidth: "120px",
-            render: (data) => <span>{data?.newSalary}VNĐ</span>,
+            render: (data) => <span>{parseInt(data?.newSalary).toLocaleString()} VNĐ</span>,
         },
         {
             title: "Lý do",
             field: "reason",
-            align: "center",
+            align: "left",
             minWidth: "130px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.reason}</span>
         },
         {
             title: "Ghi chú",
             field: "note",
-            align: "center",
+            align: "left",
             minWidth: "160px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.note}</span>
         }
     ];
 

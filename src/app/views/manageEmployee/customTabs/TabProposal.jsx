@@ -23,6 +23,7 @@ import {
     getProposalByEmployeeAction,
 } from "app/redux/actions/proposalAction";
 import FormProposal from "app/component/employeeForm/FormProposal";
+import "../../../../styles/views/_style.scss"
 
 const TabPropose = ({ setOpenDialog }) => {
     const { employee } = useSelector((state) => state.employees);
@@ -36,7 +37,6 @@ const TabPropose = ({ setOpenDialog }) => {
         note: "",
         type: "",
         detailedDescription: "",
-        leaderId: employee?.leaderId || "",
     };
     const [dataPage, setDataPage] = useState([]);
     const [proposalObj, setProposalObj] = useState(initialValue);
@@ -83,9 +83,8 @@ const TabPropose = ({ setOpenDialog }) => {
         setProposalObj(initialValue);
     };
 
-    const handleViewEmployee = (data) => {
+    const handleViewEmployee = () => {
         setDialogViewCV(true);
-        setProposalObj(data);
     };
 
     const handleNotifyEmployee = (data) => {
@@ -198,12 +197,14 @@ const TabPropose = ({ setOpenDialog }) => {
             field: "content",
             align: "center",
             minWidth: "80px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.content}</span>
         },
         {
             title: "Mô tả",
             field: "detailedDescription",
             align: "left",
             minWidth: "120px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.detailedDescription}</span>
         },
         {
             title: "Ghi chú",
@@ -211,6 +212,7 @@ const TabPropose = ({ setOpenDialog }) => {
             align: "center",
             minWidth: "160px",
             maxWidth: "260px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.note}</span>
         },
         {
             title: "Trạng thái",
@@ -256,7 +258,7 @@ const TabPropose = ({ setOpenDialog }) => {
                             shrink: true,
                         }}
                         inputProps={{
-                            readOnly: true,
+                            max: moment().format("YYYY-MM-DD"),
                         }}
                         validators={["required"]}
                         errorMessages={["Ngày đề xuất không được để trống"]}

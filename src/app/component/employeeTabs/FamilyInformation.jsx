@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useConfirm } from '../useConfirm'
 import { addFamilyAction, deleteFamilyAction, editFamilyAction, getFamilyByEmployeeIdAction } from 'app/redux/actions/familyAction'
 import { GENDER, RELATIONSHIP } from 'app/const/statusEmployee'
-import { regexAddress, regexName } from 'app/const/regex'
+import "../../../styles/views/_style.scss";
+import { regexAddress } from 'app/const/regex'
 
 const FamilyInformation = () => {
     const { employee } = useSelector(state => state.employees)
@@ -118,6 +119,7 @@ const FamilyInformation = () => {
             field: "name",
             align: "left",
             minWidth: "160px",
+            render: (rowData) => <span className='text-wrapper-overflow-form'>{rowData?.name}</span>,
         },
         {
             title: "Ngày sinh",
@@ -166,7 +168,8 @@ const FamilyInformation = () => {
             title: "Địa chỉ",
             field: "address",
             align: "left",
-            minWidth: "160px"
+            minWidth: "160px",
+            render: (rowData) => <span className='text-wrapper-overflow-form'>{rowData?.address}</span>,
         },
     ];
 
@@ -191,10 +194,10 @@ const FamilyInformation = () => {
                             type="text"
                             name="name"
                             value={familyObject?.name}
-                            validators={["required", `matchRegexp:${regexName}`]}
+                            validators={["required", `matchRegexp:${regexAddress}`]}
                             errorMessages={[
                                 "Tên người thân không được để trống",
-                                "Tên người thân không được chứa các ký tự đặc biệt và các chữ số",
+                                "Tên người thân không được chứa các ký tự đặc biệt",
                             ]}
                         />
                     </Grid>
@@ -275,6 +278,9 @@ const FamilyInformation = () => {
                             errorMessages={[
                                 "Ngày sinh không được để trống",
                             ]}
+                            inputProps={{
+                                max: moment().format("YYYY-MM-DD"),
+                            }}
                         />
                     </Grid>
                     <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -387,7 +393,7 @@ const FamilyInformation = () => {
                             color="primary"
                             type='submit'
                         >
-                            Lưu
+                            {familyObject?.id ? "Cập nhật" : "Thêm"}
                         </Button>
                     </Grid>
                     <Grid item xs={12}>

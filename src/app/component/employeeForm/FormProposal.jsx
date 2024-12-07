@@ -31,55 +31,73 @@ const useStyles = makeStyles({
     },
 });
 
-const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, setOpenDialog }) => {
+const FormProposal = ({
+    open,
+    setOpen,
+    employeeData,
+    proposalObj,
+    leader,
+    save,
+    setOpenDialog,
+}) => {
     const classes = useStyles();
     const [dialogApproval, setDialogApproval] = useState(false);
     const [dialogAdditionalRequest, setDialogAdditionalRequest] = useState(false);
     const [dialogReject, setDialogReject] = useState(false);
     const [dialogLeader, setDialogLeader] = useState(false);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const dateProposal = moment(proposalObj?.startDate)
         .format("DD/MM/YYYY")
         .split("/");
 
     const handleCloseDialog = () => {
         setOpen(false);
+
     };
 
     const handleApprove = (data) => {
-        dispatch(editProposalAction({
-            ...proposalObj,
-            acceptanceDate: data.acceptanceDate,
-            proposalStatus: 3,
-        }))
-        setOpen(false)
+        dispatch(
+            editProposalAction({
+                ...proposalObj,
+                acceptanceDate: data.acceptanceDate,
+                proposalStatus: 3,
+            })
+        );
+        setOpen(false);
     };
 
     const handleAdditional = (data) => {
-        dispatch(editProposalAction({
-            ...proposalObj,
-            additionalRequest: data.additionalRequest,
-            proposalStatus: 4,
-        }))
-        setOpen(false)
+        dispatch(
+            editProposalAction({
+                ...proposalObj,
+                additionalRequest: data.additionalRequest,
+                proposalStatus: 4,
+            })
+        );
+        setOpen(false);
     };
     const handleReject = (data) => {
-        dispatch(editProposalAction({
-            ...proposalObj,
-            ...data,
-            proposalStatus: 5,
-        }))
-        setOpen(false)
+        dispatch(
+            editProposalAction({
+                ...proposalObj,
+                ...data,
+                proposalStatus: 5,
+            })
+        );
+        setOpen(false);
     };
 
-    const handleSendLeader = leaderId => {
-        dispatch(editProposalAction({
-            ...proposalObj,
-            leaderId: leaderId,
-            proposalStatus: 2,
-        }))
-        setOpen(false)
-        setOpenDialog(false)
+    const handleSendLeader = (leaderId) => {
+        dispatch(
+            editProposalAction({
+                ...proposalObj,
+                leaderId: leaderId,
+                proposalStatus: 2,
+                id: proposalObj?.id
+            })
+        );
+        setOpen(false);
+        setOpenDialog(false);
     };
 
     return (
@@ -105,9 +123,7 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, 
                 <Box className="dialog-body">
                     <Grid container spacing={3} item xs={12} className="container-form">
                         <Grid item xs={4}>
-                            <Typography className="flex-center">
-                                CÔNG TY OCEANTECH
-                            </Typography>
+                            <Typography className="flex-center">CÔNG TY OCEANTECH</Typography>
                             <Typography className="flex-center font-bold">
                                 SỐ {employeeData?.id}/ TM - ĐX
                             </Typography>
@@ -142,8 +158,8 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, 
                     </Typography>
                     <Typography>
                         Sinh ngày: {moment(employeeData?.dateOfBirth).format("DD/MM/YYYY")}.
-                        Dân tộc: {employeeData?.religion || "không"}.
-                        Tôn giáo: {employeeData?.ethnic || "không"}.
+                        Dân tộc: {employeeData?.religion || "không"}. Tôn giáo:{" "}
+                        {employeeData?.ethnic || "không"}.
                     </Typography>
                     <Typography>
                         Số căn cước công dân: {employeeData?.citizenIdentificationNumber}.
@@ -173,22 +189,32 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, 
                     <Box className="flex-between mt-32">
                         <Box>
                             <Typography className="flex-center italic">
-                                Hà Nội, Ngày {dateProposal[0]} tháng {dateProposal[1]} năm {dateProposal[2]}
+                                Hà Nội, Ngày {dateProposal[0]} tháng {dateProposal[1]} năm{" "}
+                                {dateProposal[2]}
                             </Typography>
-                            <Typography className="flex-center"><span className="font-bold">Người làm đơn</span></Typography>
-                            <Typography className="flex-center">(Ký, ghi rõ họ tên)</Typography>
-                            <Typography className="mt-32 flex-center"><span className="sign-text">{employeeData?.name}</span></Typography>
+                            <Typography className="flex-center">
+                                <span className="font-bold">Người làm đơn</span>
+                            </Typography>
+                            <Typography className="flex-center">
+                                (Ký, ghi rõ họ tên)
+                            </Typography>
+                            <Typography className="mt-32 flex-center">
+                                <span className="sign-text">{employeeData?.name}</span>
+                            </Typography>
                         </Box>
                         <Box>
-                            <Typography className="flex-center"><span className="font-bold">Giám đốc</span></Typography>
-                            <Typography className="flex-center italic">(Ký tên, đóng dấu)</Typography>
+                            <Typography className="flex-center">
+                                <span className="font-bold">Giám đốc</span>
+                            </Typography>
+                            <Typography className="flex-center italic">
+                                (Ký tên, đóng dấu)
+                            </Typography>
                             {proposalObj?.proposalStatus === 2 && (
                                 <div className="mt-32 flex-center">
                                     <span className="sign-text ">{employeeData?.leaderName}</span>
                                 </div>
                             )}
                         </Box>
-
                     </Box>
                     {dialogApproval && (
                         <DialogApprove
@@ -212,7 +238,7 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, 
                             setOpen={setDialogReject}
                             data={{
                                 reasonForRefusal: proposalObj?.reasonForRefusal || "",
-                                rejectionDate: proposalObj?.rejectionDate || ""
+                                rejectionDate: proposalObj?.rejectionDate || "",
                             }}
                             handleReject={handleReject}
                         />
@@ -239,13 +265,25 @@ const FormProposal = ({ open, setOpen, employeeData, proposalObj, leader, save, 
                     </Button>
                     {leader && (
                         <>
-                            <Button variant="contained" color="primary" onClick={() => setDialogApproval(true)}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setDialogApproval(true)}
+                            >
                                 Phê duyệt
                             </Button>
-                            <Button variant="contained" color="primary" onClick={() => setDialogAdditionalRequest(true)}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setDialogAdditionalRequest(true)}
+                            >
                                 Yêu cầu bổ sung
                             </Button>
-                            <Button variant="contained" color="primary" onClick={() => setDialogReject(true)}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setDialogReject(true)}
+                            >
                                 Từ chối
                             </Button>
                         </>

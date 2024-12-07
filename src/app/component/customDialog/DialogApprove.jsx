@@ -57,13 +57,13 @@ const DialogApprove = ({ open, setOpen, data, handleApprove }) => {
                                 }
                                 variant="outlined"
                                 name={Object.keys(item)[0]}
-                                value={Object.values(item)[0] ? moment(Object.values(item)[0]).format("YYYY-MM-DD") : ""}
+                                value={Object.values(item)[0] ? moment(Object.values(item)[0]).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD")}
                                 onChange={handleChangeValue}
                                 type="date"
                                 validators={["required"]}
                                 errorMessages={["Trường này không được để trống"]}
                                 inputProps={{
-                                    min: moment().format("YYYY-MM-DD"),
+                                    max: moment().format("YYYY-MM-DD"),
                                 }}
                                 InputLabelProps={{
                                     shrink: true,

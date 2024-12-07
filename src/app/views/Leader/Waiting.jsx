@@ -21,6 +21,7 @@ import {
 import { Visibility } from "@material-ui/icons";
 import DialogApprovalWaiting from "./DialogApprovalWaiting";
 import "../../../styles/views/_style.scss";
+import FormEnd from "app/component/employeeForm/FormEnd";
 
 const Waiting = () => {
     const [pagnition, setPagnition] = useState({
@@ -29,6 +30,7 @@ const Waiting = () => {
     });
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogApplication, setOpenDialogApplication] = useState(false);
+    const [openDialogEnd, setOpenDialogEnd] = useState(false);
     const [keyword, setKeyword] = useState("");
     const dispatch = useDispatch();
     const { employees, totalElements, isLoading } = useSelector(
@@ -64,6 +66,11 @@ const Waiting = () => {
         dispatch(setEmployeeAction(data))
     };
 
+    const handleEndEmployee = async (data) => {
+        setOpenDialogEnd(true);
+        dispatch(setEmployeeAction(data))
+    };
+
     const columns = [
         {
             title: "Thao tác",
@@ -73,18 +80,26 @@ const Waiting = () => {
             render: (rowData) => {
                 return (
                     <div style={{ display: "flex", justifyContent: "center" }}>
-                        {STATUS_EMPLOYEE.WAITING_APPROVAL.includes(
-                            rowData.submitProfileStatus
-                        ) && (
-                                <IconButton
-                                    size="small"
-                                    onClick={() => handleApplicationForm(rowData)}
-                                >
-                                    <Icon fontSize="small" color="primary">
-                                        receipt
-                                    </Icon>
-                                </IconButton>
-                            )}
+                        {rowData.submitProfileStatus === "2" && (
+                            <IconButton
+                                size="small"
+                                onClick={() => handleApplicationForm(rowData)}
+                            >
+                                <Icon fontSize="small" color="primary">
+                                    receipt
+                                </Icon>
+                            </IconButton>
+                        )}
+                        {rowData.submitProfileStatus === "6" && (
+                            <IconButton
+                                size="small"
+                                onClick={() => handleEndEmployee(rowData)}
+                            >
+                                <Icon fontSize="small" color="primary">
+                                    receipt
+                                </Icon>
+                            </IconButton>
+                        )}
                         {STATUS_EMPLOYEE.WAITING_END_PROCESS.includes(
                             rowData.submitProfileStatus
                         ) && (
@@ -209,6 +224,14 @@ const Waiting = () => {
                             open={openDialogApplication}
                             setOpen={setOpenDialogApplication}
                             leader={true}
+                        />
+                    )}
+                    {openDialogEnd && (
+                        <FormEnd
+                            open={openDialogEnd}
+                            setOpen={setOpenDialogEnd}
+                            leader={true}
+                            canUpdate={false}
                         />
                     )}
                     <CustomTable

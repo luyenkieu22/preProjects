@@ -1,20 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, DialogActions, DialogContent, DialogTitle, Grid, Icon, IconButton, Dialog, Box } from "@material-ui/core";
-import moment from "moment";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import { useDispatch, useSelector } from "react-redux";
+import { editEmployeeAction } from "app/redux/actions/employeesAction";
 
-const DialogReject = ({ open, setOpen, data, handleReject }) => {
-    const [item, setItem] = useState({ ...data });
+const DialogSaveEmployee = ({ open, setOpen }) => {
+    const { employee } = useSelector(state => state.employees);
+    const dispatch = useDispatch()
+    const [item, setItem] = useState("");
+
 
     const handleChangeValue = (e) => {
-        const { name, value } = e.target;
-        setItem({ ...item, [name]: value })
+        setItem(e.target.value)
     }
 
+
     const handleSubmit = () => {
-        handleReject(item)
+        const dateNow = new Date();
+        const getMonth = dateNow.getMonth() + 1
+        const getYear = dateNow.getFullYear()
+        const numberSaved = `NL${getMonth}${getYear}/${item}`
+
+        dispatch(editEmployeeAction({
+            ...employee,
+            numberSaved: numberSaved,
+            submitProfileStatus: "0",
+        }))
         setOpen(false);
     }
+
+    useEffect(() => {
+        ValidatorForm.addValidationRule("validateCode", (value) => {
+            return value.length === 3
+        })
+
+        return () => {
+            ValidatorForm.removeValidationRule("validateCode")
+        }
+    }, [])
+
     return (
         <Dialog
             open={open}
@@ -23,7 +47,7 @@ const DialogReject = ({ open, setOpen, data, handleReject }) => {
         >
             <DialogTitle id="draggable-dialog-title">
                 <Box display={'flex'} justifyContent={"space-between"} alignItems={"center"}>
-                    <span className="mb-6">Từ chối</span>
+                    <span className="mb-6">Lưu hồ sơ</span>
                     <IconButton className="position-absolute r-10 t-10" onClick={() => setOpen(false)}>
                         <Icon title="close">
                             close
@@ -41,40 +65,18 @@ const DialogReject = ({ open, setOpen, data, handleReject }) => {
                                 label={
                                     <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
-                                        Ngày từ chối
+                                        Mã hồ sơ
                                     </span>
                                 }
                                 variant="outlined"
-                                name={Object.keys(item)[1]}
-                                value={Object.values(item)[1] ? moment(Object.values(item)[1]).format("YYYY-MM-DD") : moment().format("YYYY-MM-DD")}
-                                onChange={handleChangeValue}
-                                type="date"
-                                validators={["required"]}
-                                errorMessages={["Trường này không được để trống"]}
-                                inputProps={{
-                                    max: moment().format("YYYY-MM-DD"),
-                                }}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextValidator
-                                className="w-100 stylePlaceholder"
-                                size="small"
-                                label={
-                                    <span style={{ color: "black" }}>
-                                        <span style={{ color: "red" }}> * </span>
-                                        Lý do từ chối
-                                    </span>}
-                                variant="outlined"
-                                name={Object.keys(item)[0]}
-                                value={Object.values(item)[0]}
+                                value={item}
                                 onChange={handleChangeValue}
                                 type="text"
-                                validators={["required"]}
-                                errorMessages={["Trường này không được để trống"]}
+                                validators={["required", "validateCode"]}
+                                errorMessages={[
+                                    "Trường này không được để trống",
+                                    "Mã hồ sơ phải đủ 3 ký tự"
+                                ]}
                             />
                         </Grid>
                     </Grid>
@@ -101,5 +103,5 @@ const DialogReject = ({ open, setOpen, data, handleReject }) => {
     )
 }
 
-export default DialogReject
+export default DialogSaveEmployee
 

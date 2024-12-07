@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     DialogActions,
     Button,
@@ -23,6 +23,7 @@ import DialogReject from "../../component/customDialog/DialogReject";
 import { useDispatch, useSelector } from "react-redux";
 import { editEmployeeAction } from "app/redux/actions/employeesAction";
 import DialogSendLeader from "../../component/customDialog/DialogSendLeader";
+import { getCertificateByEmployeeAction } from "app/redux/actions/certificatesAction";
 
 const useStyles = makeStyles({
     title: {
@@ -39,6 +40,8 @@ const DialogApprovalWaiting = ({
     leader,
     canUpdate,
     sendLeader,
+    showEmployeeEnd,
+    setOpenDialogEmployee
 }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -50,6 +53,11 @@ const DialogApprovalWaiting = ({
     const [openDialogSendLeader, setOpenDialogSendLeader] = useState(false);
     const [activity, setActivity] = useState(employee?.activity);
     const [skill, setSkill] = useState(employee?.skill);
+
+
+    useEffect(() => {
+        dispatch(getCertificateByEmployeeAction(employee?.id));
+    }, [dispatch, employee.id]);
 
     const handleCloseDialog = () => {
         setOpen(false);
@@ -90,6 +98,18 @@ const DialogApprovalWaiting = ({
             })
         );
     };
+
+    const handleSendLeader = () => {
+        dispatch(
+            editEmployeeAction({
+                ...employee,
+                activity: activity,
+                skill: skill,
+            })
+        );
+        setOpenDialogSendLeader(true);
+    };
+
     const handleReject = (data) => {
         dispatch(
             editEmployeeAction({
@@ -111,14 +131,18 @@ const DialogApprovalWaiting = ({
             <DialogTitle>
                 <Box className={classes.title}>
                     <Typography variant="h5">Thông tin nhân viên</Typography>
-                    <IconButton
-                        className="position-absolute r-10 t-10"
-                        onClick={handleCloseDialog}
-                    >
-                        <Icon color="default" title="close">
-                            close
-                        </Icon>
-                    </IconButton>
+                    {showEmployeeEnd ? (
+                        <Typography variant="h5">{employee?.numberSaved}</Typography>
+                    ) : (
+                        <IconButton
+                            className="position-absolute r-10 t-10"
+                            onClick={handleCloseDialog}
+                        >
+                            <Icon color="default" title="close">
+                                close
+                            </Icon>
+                        </IconButton>
+                    )}
                 </Box>
             </DialogTitle>
             <DialogContent>
@@ -186,6 +210,7 @@ const DialogApprovalWaiting = ({
                         open={openDialogSendLeader}
                         setOpen={setOpenDialogSendLeader}
                         setOpenRequest={setOpen}
+                        setOpenDialogEmployee={setOpenDialogEmployee}
                     />
                 )}
             </Grid>
@@ -225,18 +250,18 @@ const DialogApprovalWaiting = ({
                 {sendLeader && (
                     <>
                         <Button
-                            onClick={handleSaveCV}
-                            variant="contained"
-                            color="secondary"
-                        >
-                            Lưu
-                        </Button>
-                        <Button
-                            onClick={() => setOpenDialogSendLeader(true)}
+                            onClick={handleSendLeader}
                             variant="contained"
                             color="primary"
                         >
                             Trình lãnh đạo
+                        </Button>
+                        <Button
+                            onClick={handleSaveCV}
+                            variant="contained"
+                            color="primary"
+                        >
+                            Lưu
                         </Button>
                     </>
                 )}

@@ -84,6 +84,7 @@ const FormProcess = ({ open, setOpen, employeeData, processObj, leader, save, se
                 ...processObj,
                 leaderId: leaderId,
                 processStatus: 2,
+                id: processObj?.id
             })
         );
         setOpen(false);

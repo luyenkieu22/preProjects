@@ -39,7 +39,7 @@ export const useConfirm = (title, message) => {
                         color="secondary"
                         onClick={handleCancel}
                     >
-                        Không
+                        Hủy
                     </Button>
                     <Button
                         variant="contained"
@@ -47,7 +47,7 @@ export const useConfirm = (title, message) => {
                         color="primary"
                         onClick={handleConfirm}
                     >
-                        Có
+                        Xác nhận
                     </Button>
                 </div>
             </DialogActions>

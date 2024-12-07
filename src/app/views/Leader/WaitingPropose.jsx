@@ -19,6 +19,7 @@ import { getCertificateByEmployeeAction } from "app/redux/actions/certificatesAc
 import { getFamilyByEmployeeIdAction } from "app/redux/actions/familyAction";
 import { getProposalByLeaderAction } from "app/redux/actions/proposalAction";
 import FormProposal from "app/component/employeeForm/FormProposal";
+import "../../../styles/views/_style.scss"
 
 const WaitingPropose = () => {
     const [pagnition, setPagnition] = useState({
@@ -112,27 +113,30 @@ const WaitingPropose = () => {
         {
             title: "Loại đề xuất",
             field: "type",
-            align: "center",
+            align: "left",
             minWidth: "120px",
             render: (data) => <span>{TYPE_PROPOSAL[data?.type]?.name}</span>
         },
         {
             title: "Mô tả chi tiết",
             field: "detailedDescription",
-            align: "center",
+            align: "left",
             minWidth: "120px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.detailedDescription}</span>
         },
         {
             title: "Nội dung",
             field: "content",
-            align: "center",
+            align: "left",
             minWidth: "130px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.content}</span>
         },
         {
             title: "Ghi chú",
             field: "note",
-            align: "center",
+            align: "left",
             minWidth: "160px",
+            render: (data) => <span className="text-wrapper-overflow-form">{data?.note}</span>
         }
     ];
 

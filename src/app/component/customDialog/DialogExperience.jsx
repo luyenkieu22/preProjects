@@ -16,7 +16,7 @@ import {
     editExperienceAction,
 } from "app/redux/actions/experiencesAction";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useDispatch } from "react-redux";
 
@@ -33,7 +33,8 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const [experiencesObject, setExperienceObject] = useState({
-        id: idEmployee || "",
+        employeeId: idEmployee || "",
+        id: data?.id,
         companyName: data?.companyName || "",
         startDate: data?.startDate || "",
         endDate: data?.endDate || "",
@@ -61,6 +62,17 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
         setOpen(false);
     };
 
+    useEffect(() => {
+        ValidatorForm.addValidationRule("endDateValidate", (value) => {
+            const endDate = new Date(value);
+            const startDate = new Date(experiencesObject?.startDate)
+            return endDate > startDate
+        })
+        return () => {
+            ValidatorForm.removeValidationRule("endDateValidate")
+        }
+    }, [experiencesObject.startDate])
+
     return (
         <Dialog open={open} maxWidth={"md"} fullWidth={true}>
             <DialogTitle>
@@ -86,7 +98,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Tên công ty
                                     </span>
@@ -105,7 +117,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Địa chỉ công ty
                                     </span>
@@ -124,7 +136,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Ngày bắt đầu
                                     </span>
@@ -140,6 +152,9 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                inputProps={{
+                                    max: moment().format("YYYY-MM-DD")
+                                }}
                                 validators={["required"]}
                                 errorMessages={["Ngày bắt đầu không được để trống"]}
                             />
@@ -149,7 +164,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Ngày kết thúc
                                     </span>
@@ -165,8 +180,11 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                validators={["required"]}
-                                errorMessages={["Ngày kết thúc không được để trống"]}
+                                validators={["required", "endDateValidate"]}
+                                errorMessages={[
+                                    "Ngày kết thúc không được để trống",
+                                    "Ngày kết thúc phải lớn hơn ngày bắt đầu"
+                                ]}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -174,7 +192,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Mô tả công việc
                                     </span>
@@ -193,7 +211,7 @@ const DialogExperience = ({ open, setOpen, idEmployee, data, setData }) => {
                                 size="small"
                                 fullWidth
                                 label={
-                                    <span>
+                                    <span style={{ color: "black" }}>
                                         <span style={{ color: "red" }}> * </span>
                                         Lý do nghỉ việc
                                     </span>

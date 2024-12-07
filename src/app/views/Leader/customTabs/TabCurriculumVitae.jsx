@@ -68,7 +68,7 @@ const TabCurriculumVitae = () => {
                             <Grid container>
                                 <Grid item xs={12} md={8} className="flex">
                                     <span className="text-md">
-                                        1.Họ và tên nhân viên:
+                                        1. Họ và tên nhân viên:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
                                         {employee?.name}
@@ -110,7 +110,7 @@ const TabCurriculumVitae = () => {
                             <Grid container>
                                 <Grid item xs={12} md={6} className="flex">
                                     <span className="text-md">
-                                        6.Dân tộc:
+                                        6. Dân tộc:
                                     </span>
                                     <span className="underline__dotted text-md detail-content">
                                         {employee?.ethnic}
@@ -161,7 +161,7 @@ const TabCurriculumVitae = () => {
                             <Table border="1">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="center" width="6%" className="table-head">
+                                        <TableCell align="center" width="8%" className="table-head">
                                             STT
                                         </TableCell>
                                         <TableCell align="center" width="20%" className="table-head">
@@ -188,13 +188,13 @@ const TabCurriculumVitae = () => {
                                     {family.length > 0
                                         ? family?.map((family, index) => (
                                             <TableRow key={index}>
-                                                <TableCell align="left" className="table-body">
+                                                <TableCell align="center" className="table-body">
                                                     {index + 1}
                                                 </TableCell>
-                                                <TableCell align="left" className="table-body text-overflow">
+                                                <TableCell align="left" className="table-body">
                                                     {family?.name}
                                                 </TableCell>
-                                                <TableCell align="left" className="table-body">
+                                                <TableCell align="center" className="table-body">
                                                     {moment(new Date(family?.dateOfBirth)).format(
                                                         "DD/MM/YYYY"
                                                     )}
@@ -202,13 +202,13 @@ const TabCurriculumVitae = () => {
                                                 <TableCell align="left" className="table-body">
                                                     {RELATIONSHIP[family?.relationShip]?.name}
                                                 </TableCell>
-                                                <TableCell align="left" className="table-body">
+                                                <TableCell align="center" className="table-body">
                                                     {family?.phoneNumber}
                                                 </TableCell>
-                                                <TableCell align="left" className="table-body">
+                                                <TableCell align="center" className="table-body">
                                                     {family?.citizenIdentificationNumber}
                                                 </TableCell>
-                                                <TableCell align="left" className="table-body text-overflow">
+                                                <TableCell align="left" className="table-body">
                                                     {family?.address}
                                                 </TableCell>
                                             </TableRow>
@@ -241,7 +241,7 @@ const TabCurriculumVitae = () => {
                         <Box className="footer-container">
                             <div className="footer-date">
                                 <div className="vitae-date">
-                                    <span className="vitae-place text-md">Hà Nội</span>,
+                                    <span className="vitae-place text-md">Hà Nội, </span>
                                     <div className="type-date">
                                         <span className="vitae-place text-md"> ngày</span>
                                         <span className="type-content text-md underline__dotted">

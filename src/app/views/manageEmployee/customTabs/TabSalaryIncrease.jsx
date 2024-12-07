@@ -21,7 +21,7 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { useDispatch, useSelector } from "react-redux";
-import { getOldSalaryIncrease } from "utils";
+import "../../../../styles/views/_style.scss"
 
 const TabSalaryIncrease = ({ setOpenDialog }) => {
     const { employee } = useSelector(state => state.employees)
@@ -32,15 +32,12 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
     const initialValue = {
         startDate: moment().format("YYYY-MM-DD"),
         reason: "",
-        currentPosition: employee?.currentPosition || "",
         note: "",
         oldSalary: 0,
         newSalary: "",
-        leaderId: employee?.leaderId || "",
     };
     const [dataPage, setDataPage] = useState([]);
     const [salaryObj, setSalaryObj] = useState(initialValue);
-    const oldSalaryIncrease = getOldSalaryIncrease(salaryIncrease);
     const [dialogViewForm, setDialogForm] = useState(false);
     const [dialogSave, setDialogSave] = useState(false);
     const [dialogNotifyRequest, setDialogNotifyRequest] = useState(false);
@@ -93,9 +90,9 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
         setSalaryObj(initialValue);
     };
 
-    const handleViewEmployee = (data) => {
+    const handleViewEmployee = () => {
         setDialogForm(true);
-        setSalaryObj(data);
+        setSalaryObj(initialValue);
     };
 
     const handleNotifyEmployee = (data) => {
@@ -115,18 +112,21 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
                 editSalaryIncreaseAction({
                     ...salaryObj,
                     startDate: moment().format("YYYY-MM-DD"),
-                    oldSalary: oldSalaryIncrease !== null ? oldSalaryIncrease : 0,
+                    oldSalary: salaryObj?.oldSalary !== null ? salaryObj?.oldSalary : 0,
                 })
             );
         } else {
             dispatch(
                 addSalaryIncreaseAction(
-                    { ...salaryObj, oldSalary: oldSalaryIncrease !== null ? oldSalaryIncrease : 0 },
+                    {
+                        ...salaryObj,
+                        oldSalary: salaryObj?.oldSalary !== null ? salaryObj?.oldSalary : 0,
+                    },
                     employee?.id
                 )
             );
         }
-        setDialogSave(true)
+        setDialogSave(true);
     };
 
     const columns = [
@@ -205,31 +205,33 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
             align: "left",
             minWidth: "180px",
             maxWidth: "200px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.reason}</span>
         },
         {
             title: "Lương cũ",
             field: "oldSalary",
-            align: "center",
+            align: "right",
             minWidth: "80px",
             render: (rowData) => (
-                <span>{parseInt(rowData?.oldSalary).toLocaleString()}</span>
+                <span>{parseInt(rowData?.oldSalary).toLocaleString()} VNĐ</span>
             ),
         },
         {
             title: "Lương mới",
             field: "newSalary",
-            align: "left",
+            align: "right",
             minWidth: "80px",
             render: (rowData) => (
-                <span>{parseInt(rowData?.newSalary).toLocaleString()}</span>
+                <span>{parseInt(rowData?.newSalary).toLocaleString()} VNĐ</span>
             ),
         },
         {
             title: "Ghi chú",
             field: "note",
-            align: "center",
+            align: "left",
             minWidth: "160px",
             maxWidth: "260px",
+            render: (rowData) => <span className="text-wrapper-overflow-form">{rowData?.note}</span>
         },
         {
             title: "Trạng thái",
@@ -276,7 +278,9 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
                         InputLabelProps={{
                             shrink: true,
                         }}
-                        disabled
+                        inputProps={{
+                            max: moment().format("YYYY-MM-DD"),
+                        }}
                         validators={["required"]}
                         errorMessages={["Ngày bắt đầu không được để trống"]}
                     />
@@ -292,7 +296,7 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
                             </span>
                         }
                         variant="outlined"
-                        value={oldSalaryIncrease ? oldSalaryIncrease.toLocaleString() : 0}
+                        value={salaryObj?.oldSalary ? salaryObj?.oldSalary.toLocaleString() : 0}
                         disabled
                         type="text"
                         name="oldSalary"
@@ -318,7 +322,7 @@ const TabSalaryIncrease = ({ setOpenDialog }) => {
                         type="text"
                         name="newSalary"
                         value={
-                            salaryObj?.newSalary ? salaryObj?.newSalary.toLocaleString() : ""
+                            salaryObj?.newSalary ? salaryObj?.newSalary.toLocaleString() : 0
                         }
                         onChange={handleChangeValue}
                         InputProps={{

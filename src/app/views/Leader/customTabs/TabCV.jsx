@@ -26,17 +26,13 @@ import {
     deleteExperienceAction,
     getExperienceByEmployeeAction,
 } from "app/redux/actions/experiencesAction";
+import "../../../../styles/views/_form.scss";
 import { useConfirm } from "app/component/useConfirm";
+import { toast } from "react-toastify";
 
-const TabCV = ({
-    skill,
-    activity,
-    setSkill,
-    setActivity,
-    canUpdate,
-}) => {
+const TabCV = ({ skill, activity, setSkill, setActivity, canUpdate }) => {
     const classes = useStyle();
-    const { employee } = useSelector(state => state.employees)
+    const { employee } = useSelector((state) => state.employees);
     const { certificates } = useSelector((state) => state.certificates);
     const { experiences, isLoading } = useSelector((state) => state.experiences);
     const dispatch = useDispatch();
@@ -58,22 +54,32 @@ const TabCV = ({
     }, [dispatch, employee.id, isLoading]);
 
     const handleSaveActivity = () => {
-        setListActivity(activity.split("\n"));
-        setUpdateActivity(false);
+        if (activity && activity.trim()) {
+            setListActivity(activity?.split("\n"));
+            setUpdateActivity(false);
+        } else {
+            toast.warning("Hoạt động không được để trống!")
+        }
     };
 
-    const handleDeleteExperience = async () => {
+    const handleDeleteExperience = async (id) => {
         const ok = await confirm();
         if (!ok) return;
-        dispatch(deleteExperienceAction(employee?.id));
+        dispatch(deleteExperienceAction(id));
     };
+
     const handleUpdateExperience = (data) => {
         setExperience(data);
         setExperienceDialog(true);
     };
+
     const handleSaveSkill = () => {
-        setListSkill(skill.split("\n"));
-        setUpdateSkill(false);
+        if (skill && skill.trim()) {
+            setListSkill(skill?.split("\n"));
+            setUpdateSkill(false);
+        } else {
+            toast.warning("Kỹ năng không được để trống!")
+        }
     };
 
     const profileData = [
@@ -109,6 +115,8 @@ const TabCV = ({
             <DialogConfirm />
             <Box className={classes.container}>
                 <Grid container className={classes.boxContent}>
+
+                    {/* ----------------------- Box left ----------------------- */}
                     <Grid item xs={7} spacing={4} className={classes.boxLeft}>
                         <img
                             style={{
@@ -118,9 +126,7 @@ const TabCV = ({
                                 border: "1px solid #cccccc",
                             }}
                             src={
-                                employee?.image
-                                    ? employee?.image
-                                    : "/assets/images/avatar.jpg"
+                                employee?.image ? employee?.image : "/assets/images/avatar.jpg"
                             }
                             alt="avatar"
                         />
@@ -146,13 +152,10 @@ const TabCV = ({
                             <Typography>
                                 <FormatQuoteOutlinedIcon />
                                 <span style={{ fontSize: "14px" }}>
-                                    Phát triển chuyên môn và thành công trong công việc. Mục tiêu
-                                    này có thể bao gồm việc thăng tiến lên các vị trí cao hơn,
-                                    phát triển kỹ năng chuyên môn, hoặc mở rộng mạng lưới quan hệ
-                                    trong ngành. Một mục tiêu nghề nghiệp rõ ràng không chỉ giúp
-                                    định hình lộ trình nghề nghiệp mà còn tạo động lực và giúp
-                                    người lao động duy trì sự cam kết, học hỏi, và phát triển bản
-                                    thân liên tục để đạt được những thành tựu mong muốn.
+                                    Áp dụng những kinh nghiệm về kỹ năng bán hàng và sự hiểu biết
+                                    về thị trường để trở thành một nhân viên bán hàng chuyên
+                                    nghiệp, mang đến nhiều giá trị cho khách hàng. Từ đó giúp Công
+                                    ty tăng số lượng khách hàng và mở rộng tập khách hàng.
                                 </span>
                             </Typography>
                         </Grid>
@@ -180,8 +183,11 @@ const TabCV = ({
                                 />
                             )}
                             {experiences?.map((experience) => (
-                                <Box key={experience?.id}>
-                                    <Box className={classes.iconSkill} justifyContent={"space-between"}>
+                                <Box key={experience?.id} marginTop={2}>
+                                    <Box
+                                        className={classes.iconSkill}
+                                        justifyContent={"space-between"}
+                                    >
                                         <Typography variant="body2" style={{ fontWeight: 500 }}>
                                             {moment(new Date(experience?.startDate)).format(
                                                 "DD/MM/YYYY"
@@ -192,9 +198,7 @@ const TabCV = ({
                                             )}
                                         </Typography>
                                         {canUpdate && (
-                                            <Box
-                                                className={classes.iconSkill}
-                                            >
+                                            <Box className={classes.iconSkill}>
                                                 <EditIcon
                                                     fontSize="small"
                                                     color="primary"
@@ -205,16 +209,28 @@ const TabCV = ({
                                                     fontSize="small"
                                                     color="error"
                                                     style={{ cursor: "pointer" }}
-                                                    onClick={handleDeleteExperience}
+                                                    onClick={() => handleDeleteExperience(experience?.id)}
                                                 />
                                             </Box>
                                         )}
                                     </Box>
-                                    <Typography variant="body2">
-                                        <span style={{ fontWeight: 500 }}>{experience?.companyName}</span>:
-                                        <span style={{ fontWeight: 500 }}> {experience?.companyAddress}</span>
+                                    <Typography
+                                        variant="body2"
+                                        className={classes.textDescription}
+                                    >
+                                        <span style={{ fontWeight: 500 }}>
+                                            {experience?.companyName}
+                                        </span>
+                                        :
+                                        <span style={{ fontWeight: 500 }}>
+                                            {" "}
+                                            {experience?.companyAddress}
+                                        </span>
                                     </Typography>
-                                    <Typography>- {experience?.jobDescription}</Typography>
+                                    <Box>
+                                        <Typography style={{ fontWeight: 500 }}>Mô tả công việc</Typography>
+                                        <Typography className={classes.textDescription}>• {experience?.jobDescription}</Typography>
+                                    </Box>
                                 </Box>
                             ))}
                         </Grid>
@@ -235,8 +251,12 @@ const TabCV = ({
                                     <TextField
                                         multiline
                                         variant="standard"
+                                        className="underline-dash"
                                         value={activity}
                                         onChange={(e) => setActivity(e.target.value)}
+                                        InputProps={{
+                                            disableUnderline: true
+                                        }}
                                     />
                                     <Button
                                         variant="contained"
@@ -255,12 +275,12 @@ const TabCV = ({
                                 </>
                             )}
                             {listActivity?.map((activity, index) => (
-                                <Box key={index}>- {activity}</Box>
+                                <Box key={index} className={classes.textDescription}>- {activity}</Box>
                             ))}
                         </Grid>
                     </Grid>
 
-                    {/* Box right */}
+                    {/* ----------------------- Box right ----------------------- */}
                     <Grid item xs={5} className={classes.boxRight}>
                         <Box className={classes.iconBackground}></Box>
                         {profileData.map((icon) => (
@@ -293,8 +313,12 @@ const TabCV = ({
                                     <TextField
                                         multiline
                                         variant="standard"
+                                        className="underline-dash"
                                         value={skill}
                                         onChange={(e) => setSkill(e.target.value)}
+                                        InputProps={{
+                                            disableUnderline: true
+                                        }}
                                     />
                                     <Button
                                         variant="contained"
@@ -317,7 +341,7 @@ const TabCV = ({
                             ))}
                         </Box>
                         <Box className={classes.boxProfile2}>
-                            <Box className={classes.iconBackground2}></Box>
+                            <Box className={classes.iconBackground2} marginTop={"2px"}></Box>
                             <Box>
                                 <SettingsIcon className={classes.icon} />
                                 <Typography className={classes.textTitle}>Chứng chỉ</Typography>
@@ -335,7 +359,9 @@ const TabCV = ({
                                             )}
                                         </Typography>
                                     </Box>
-                                    <Typography variant="body2">{certificate?.content}</Typography>
+                                    <Typography variant="body2" className={classes.textDescription}>
+                                        {certificate?.content}
+                                    </Typography>
                                 </Box>
                             ))}
                         </Box>
@@ -406,6 +432,10 @@ const useStyle = makeStyles({
         fontSize: "20px",
         color: "#00b4d8",
         fontWeight: "600",
+    },
+    textDescription: {
+        width: "60%",
+        flexWrap: "wrap",
     },
     textOverflow: {
         width: "280px",
