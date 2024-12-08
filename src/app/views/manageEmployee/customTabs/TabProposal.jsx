@@ -383,7 +383,7 @@ const TabPropose = ({ setOpenDialog }) => {
             {dialogSave && (
                 <FormProposal
                     open={dialogSave}
-                    setOpen={setDialogViewCV}
+                    setOpen={setDialogSave}
                     setOpenDialog={setOpenDialog}
                     employeeData={employee}
                     proposalObj={proposalObj}
