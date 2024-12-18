@@ -137,14 +137,14 @@ const FamilyInformation = () => {
             align: "center",
             minWidth: "100px",
             maxWidth: "120px",
-            render: (rowData) => <span>{`${GENDER[rowData?.gender].name}`}</span>,
+            render: (rowData) => <span>{`${GENDER[rowData?.gender]?.name}`}</span>,
         },
         {
             title: "Quan hệ",
             field: "relationShip",
             align: "left",
             minWidth: "130px",
-            render: (rowData) => <span>{`${RELATIONSHIP[rowData?.relationShip].name}`}</span>,
+            render: (rowData) => <span>{`${RELATIONSHIP[rowData?.relationShip]?.name}`}</span>,
         },
         {
             title: "Số CCCD",
@@ -302,7 +302,7 @@ const FamilyInformation = () => {
                             errorMessages={["Giới tính không được để trống"]}
                         >
                             {GENDER.map(gender => (
-                                <MenuItem value={gender.id + 1}>{gender.name}</MenuItem>
+                                <MenuItem value={gender.id}>{gender?.name}</MenuItem>
 
                             ))}
                         </SelectValidator>

@@ -376,6 +376,7 @@ export default TabCV;
 
 const useStyle = makeStyles({
     container: {
+        fontFamily: '"Times New Roman", Times, serif',
         backgroundColor: "#cccccc",
         display: "flex",
         justifyContent: "center",

@@ -43,7 +43,6 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest, setOpenDialogEmployee
         const { value, name } = e.target;
         if (name === "leaderId") {
             const newLeader = LEADER.find(leader => leader.id === value);
-
             setFormData({
                 ...formData,
                 leaderPosition: newLeader.leaderPosition,
@@ -154,11 +153,16 @@ const DialogSendLeader = ({ open, setOpen, setOpenRequest, setOpenDialogEmployee
                                 type="text"
                                 name="leaderPosition"
                                 disabled
-                                value={formData?.leaderPosition}
-                                onChange={handleChangeValue}
+                                value={formData?.leaderPosition || "leaderPosition"}
                                 validators={["required"]}
                                 errorMessages={["Chức vụ không được để trống"]}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             >
+                                <MenuItem value="leaderPosition" disabled>
+                                    -- Chọn chức vụ --
+                                </MenuItem>
                                 {LEADER_POSITION.map((position) => (
                                     <MenuItem value={position.id} key={position.id}>
                                         {position.value}
